@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {BrowserRouter as Router, Route, Link} from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-import StandupIndex from "./components/standup-list.component";
+import StandupIndex from "./components/standup-index.component";
 
 class App extends Component {
   render() {
