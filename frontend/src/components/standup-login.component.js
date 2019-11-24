@@ -31,7 +31,6 @@ class LoginForm extends Component {
       send_data
     ).then(
       res => {
-        console.log('Login Data: '+res.data);
         this.setState({error_msg: ''});
       },
       err => {
@@ -109,7 +108,7 @@ class RegisterForm extends Component {
     this.onChangeFName = this.onChangeFName.bind(this);
     this.onChangeLName = this.onChangeLName.bind(this);
 
-    this.state = {email: '', pass: '', fname: '', lname: ''};
+    this.state = {email: '', pass: '', fname: '', lname: '', error_msg: ''};
   }
 
   onSubmit(e) {
@@ -125,11 +124,14 @@ class RegisterForm extends Component {
       send_data
     ).then(
       res => {
-        console.log('Register Status '+res.status);
-        console.log('Register Data: '+res.data);
+        this.setState({error_msg: ''});
       },
       err => {
-        console.log('Login: ' + err);
+        if (err.response) {
+          this.setState({error_msg: err.response.data.message});
+        } else {
+          this.setState({error_msg: err})
+        }
       }
     );
     this.setState({email: '', pass: '', fname: '', lname: ''});
@@ -152,46 +154,58 @@ class RegisterForm extends Component {
   }
 
   render() {
+    const error_msg = '' + this.state.error_msg;
+    const error_style = error_msg ? {} : {display: 'none'};
+
     return (
-      <form onSubmit={this.onSubmit}>
-        <div className="form-group">
-          <label>Email</label>
-          <input type="text"
-                 className="form-control"
-                 required="required"
-                 onChange={this.onChangeEmail}
-          />
+      <div>
+        <div className="row" style={error_style}>
+          <div className="col-12">
+            <div className="alert alert-danger">
+              {error_msg}
+            </div>
+          </div>
         </div>
-        <div className="form-group">
-          <label>Password</label>
-          <input type="password"
-                 className="form-control"
-                 onChange={this.onChangePass}
-          />
-        </div>
-        <div className="form-group">
-          <label>First Name</label>
-          <input type="text"
-                 className="form-control"
-                 required="required"
-                 onChange={this.onChangeFName}
-          />
-        </div>
-        <div className="form-group">
-          <label>Last Name</label>
-          <input type="text"
-                 className="form-control"
-                 onChange={this.onChangeLName}
-          />
-        </div>
-        <br />
-        <div className="form-group">
-          <input type="submit"
-                 value="Register"
-                 className="btn btn-primary btn-block"
-          />
-        </div>
-      </form>
+        <form onSubmit={this.onSubmit}>
+          <div className="form-group">
+            <label>Email</label>
+            <input type="text"
+                   className="form-control"
+                   required="required"
+                   onChange={this.onChangeEmail}
+            />
+          </div>
+          <div className="form-group">
+            <label>Password</label>
+            <input type="password"
+                   className="form-control"
+                   onChange={this.onChangePass}
+            />
+          </div>
+          <div className="form-group">
+            <label>First Name</label>
+            <input type="text"
+                   className="form-control"
+                   required="required"
+                   onChange={this.onChangeFName}
+            />
+          </div>
+          <div className="form-group">
+            <label>Last Name</label>
+            <input type="text"
+                   className="form-control"
+                   onChange={this.onChangeLName}
+            />
+          </div>
+          <br />
+          <div className="form-group">
+            <input type="submit"
+                   value="Register"
+                   className="btn btn-primary btn-block"
+            />
+          </div>
+        </form>
+      </div>
     );
   }
 }
