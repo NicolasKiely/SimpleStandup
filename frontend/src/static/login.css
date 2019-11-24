@@ -7,7 +7,6 @@ div.login-register-form {
     border: lightgrey solid 2px;
     border-radius: 8px;
     padding: 0;
-    height: 90%;
     margin: 10px;
     border-collapse: collapse;
     box-sizing: border-box;
@@ -23,17 +22,42 @@ div.login-register-body {
 
 /* Login-Register title */
 div.login-register-header {
-    background-color: #DDD;
     box-sizing: border-box;
-    padding: 15px;
+    padding: 0;
+    min-height: 60px;
 }
 
-span.login-form-title {
-    text-align: left;
+div.login-title-selector {
+    box-sizing: border-box;
+    display: inline-block;
+    float: left;
+    width: 50%;
+    text-align: center;
+    padding-bottom: 10px;
 }
 
-span.register-form-title {
-    float: right;
+div.active-title-selector span {
+    border-bottom: solid 2px black;
+}
+
+div.inactive-title-selector {
+    background-color: #DBDBDB;
+    color: #25A;
+    cursor: pointer;
+}
+
+div.inactive-title-selector:hover {
+    background-color: #DFDFDF;
+    color: #2A5DC2;
+}
+
+div.register-title-selector {
+    box-sizing: border-box;
+    display: inline-block;
+    width: 50%;
+    float: left;
+    text-align: center;
+    padding-bottom: 10px;
 }
 
 span.login-register-form-title {
@@ -44,7 +68,5 @@ span.login-register-form-title {
 }
 
 span.login-register-title-active {
-    color: #25A;
-    border-bottom: solid 1px #25A;
     display: inline-block;
 }
