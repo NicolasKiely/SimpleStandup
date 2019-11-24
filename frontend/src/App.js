@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {BrowserRouter as Router, Route, Link} from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "./static/login.css";
 
 import StandupIndex from "./components/standup-index.component";
 
@@ -19,7 +20,14 @@ class App extends Component {
               </ul>
             </div>
           </nav>
-          <Route path="/" exact component={StandupIndex} />
+
+          <div className="container-fluid">
+            <div className="row">
+              <div className="col-sm-12 col-md-10 col-lg-10 offset-md-1 offset-lg-1">
+                <Route path="/" exact component={StandupIndex} />
+              </div>
+            </div>
+          </div>
         </div>
       </Router>
     );

@@ -1,0 +1,50 @@
+/**
+ * Styling for login and registration forms
+ */
+
+/* Login-Register body */
+div.login-register-form {
+    border: lightgrey solid 2px;
+    border-radius: 8px;
+    padding: 0;
+    height: 90%;
+    margin: 10px;
+    border-collapse: collapse;
+    box-sizing: border-box;
+    min-width: 160px;
+    background-color: #EEE;
+}
+
+div.login-register-body {
+    float: top;
+    padding: 20px;
+}
+
+
+/* Login-Register title */
+div.login-register-header {
+    background-color: #DDD;
+    box-sizing: border-box;
+    padding: 15px;
+}
+
+span.login-form-title {
+    text-align: left;
+}
+
+span.register-form-title {
+    float: right;
+}
+
+span.login-register-form-title {
+    font-weight: bold;
+    font-size: x-large;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+span.login-register-title-active {
+    color: #25A;
+    border-bottom: solid 1px #25A;
+    display: inline-block;
+}
