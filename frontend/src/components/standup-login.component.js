@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import axios from 'axios';
 
 
 /**
@@ -20,7 +21,22 @@ class LoginForm extends Component {
 
   onSubmit(e) {
     e.preventDefault();
-    console.log('Submitting login');
+    const send_data = {
+      login_email: this.state.email,
+      login_pass: this.state.pass
+    };
+    axios.post(
+      'http://localhost:4000/login',
+      send_data
+    ).then(
+      res => {
+        console.log('Login Status '+res.status);
+        console.log('Login Data: '+res.data);
+      },
+      err => {
+        console.log('Login: ' + err);
+      }
+    );
     this.setState({email: '', pass: ''});
   }
 
@@ -80,8 +96,25 @@ class RegisterForm extends Component {
 
   onSubmit(e) {
     e.preventDefault();
+    const send_data = {
+      register_email: this.state.email,
+      register_pass: this.state.pass,
+      register_fname: this.state.fname,
+      register_lname: this.state.lname
+    };
+    axios.post(
+      'http://localhost:4000/register',
+      send_data
+    ).then(
+      res => {
+        console.log('Register Status '+res.status);
+        console.log('Register Data: '+res.data);
+      },
+      err => {
+        console.log('Login: ' + err);
+      }
+    );
     this.setState({email: '', pass: '', fname: '', lname: ''});
-    console.log('Submitting register');
   }
 
   onChangeEmail(e){
