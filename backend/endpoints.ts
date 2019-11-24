@@ -3,18 +3,16 @@ const MSG_NOT_IMPLEMENTED = 'External endpoint not implemented';
 
 
 function auth_login(request, results) {
-  results.json(
+  results.status(500).json(
     {'payload': {}, 'error': ERR_NOT_IMPLEMENTED, 'message': MSG_NOT_IMPLEMENTED}
   );
-  results.status = 500;
 }
 
 
 function auth_register(request, results) {
-  results.json(
+  results.status(500).json(
     {'payload': {}, 'error': ERR_NOT_IMPLEMENTED, 'message': MSG_NOT_IMPLEMENTED}
   );
-  results.status = 500;
 }
 
 
