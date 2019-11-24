@@ -69,10 +69,16 @@ class RegisterForm extends Component {
   constructor(props){
     super(props);
 
+    this.onSubmit = this.onSubmit.bind(this);
+    this.onChangeEmail = this.onChangeEmail.bind(this);
+    this.onChangePass = this.onChangePass.bind(this);
+    this.onChangeFName = this.onChangeFName.bind(this);
+    this.onChangeLName = this.onChangeLName.bind(this);
+
     this.state = {email: '', pass: '', fname: '', lname: ''};
   }
 
-  onSubmitRegister(e) {
+  onSubmit(e) {
     e.preventDefault();
     this.setState({email: '', pass: '', fname: '', lname: ''});
     console.log('Submitting register');
@@ -96,11 +102,12 @@ class RegisterForm extends Component {
 
   render() {
     return (
-      <form onSubmit={this.onSubmitRegister}>
+      <form onSubmit={this.onSubmit}>
         <div className="form-group">
           <label>Email</label>
           <input type="text"
                  className="form-control"
+                 required="required"
                  onChange={this.onChangeEmail}
           />
         </div>
@@ -115,6 +122,7 @@ class RegisterForm extends Component {
           <label>First Name</label>
           <input type="text"
                  className="form-control"
+                 required="required"
                  onChange={this.onChangeFName}
           />
         </div>
@@ -149,8 +157,8 @@ class LoginRegisterForm extends Component {
     this.onSelectRegister = this.onSelectRegister.bind(this);
 
     this.state = {
-      login_form_active: true,
-      register_form_active: false
+      login_form_active: false,
+      register_form_active: true
     }
   }
 
