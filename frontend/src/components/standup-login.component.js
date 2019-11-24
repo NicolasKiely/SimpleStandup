@@ -15,7 +15,8 @@ class LoginForm extends Component {
 
     this.state = {
       email: '',
-      pass: ''
+      pass: '',
+      error_msg: ''
     }
   }
 
@@ -26,15 +27,19 @@ class LoginForm extends Component {
       login_pass: this.state.pass
     };
     axios.post(
-      'http://localhost:4000/login',
+      'http://localhost:4000/api/1/auth/login',
       send_data
     ).then(
       res => {
-        console.log('Login Status '+res.status);
         console.log('Login Data: '+res.data);
+        this.setState({error_msg: ''});
       },
       err => {
-        console.log('Login: ' + err);
+        if (err.response) {
+          this.setState({error_msg: err.response.data.message});
+        } else {
+          this.setState({error_msg: err})
+        }
       }
     );
     this.setState({email: '', pass: ''});
@@ -49,30 +54,43 @@ class LoginForm extends Component {
   }
 
   render(){
+    const error_msg = '' + this.state.error_msg;
+    const error_style = error_msg ? {} : {display: 'none'};
+
     return (
-      <form onSubmit={this.onSubmit}>
-        <div className="form-group">
-          <label>Email</label>
-          <input type="text"
-                 className="form-control"
-                 onChange={this.onChangeEmail}
-          />
+      <div>
+        <div className="row" style={error_style}>
+          <div className="col-12">
+            <div className="alert alert-danger">
+              {error_msg}
+            </div>
+          </div>
         </div>
-        <div>
-          <label>Password</label>
-          <input type="password"
-                 className="form-control"
-                 onChange={this.onChangePass}
-          />
-        </div>
-        <br />
-        <div className="form-group">
-          <input type="submit"
-                 value="Login"
-                 className="btn btn-primary btn-block"
-          />
-        </div>
-      </form>
+
+        <form onSubmit={this.onSubmit}>
+          <div className="form-group">
+            <label>Email</label>
+            <input type="text"
+                   className="form-control"
+                   onChange={this.onChangeEmail}
+            />
+          </div>
+          <div>
+            <label>Password</label>
+            <input type="password"
+                   className="form-control"
+                   onChange={this.onChangePass}
+            />
+          </div>
+          <br />
+          <div className="form-group">
+            <input type="submit"
+                   value="Login"
+                   className="btn btn-primary btn-block"
+            />
+          </div>
+        </form>
+      </div>
     );
   }
 }
@@ -103,7 +121,7 @@ class RegisterForm extends Component {
       register_lname: this.state.lname
     };
     axios.post(
-      'http://localhost:4000/register',
+      'http://localhost:4000/api/1/auth/register',
       send_data
     ).then(
       res => {
