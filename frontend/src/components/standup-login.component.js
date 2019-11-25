@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import axios from 'axios';
+import {get_backend_url} from '../utils'
 
 
 /**
@@ -26,9 +27,9 @@ class LoginForm extends Component {
       login_email: this.state.email,
       login_pass: this.state.pass
     };
+    const url = get_backend_url('/api/1/auth/login');
     axios.post(
-      'http://localhost:4000/api/1/auth/login',
-      send_data
+      url, send_data
     ).then(
       res => {
         this.setState({error_msg: ''});
@@ -120,7 +121,7 @@ class RegisterForm extends Component {
       register_lname: this.state.lname
     };
     axios.post(
-      'http://localhost:4000/api/1/auth/register',
+      get_backend_url('/api/1/auth/register'),
       send_data
     ).then(
       res => {
