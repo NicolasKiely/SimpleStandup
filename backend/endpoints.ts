@@ -2,6 +2,7 @@ import axios from 'axios';
 
 const ERR_NOT_IMPLEMENTED = 'EXT_NOT_IMPLEMENTED';
 const MSG_NOT_IMPLEMENTED = 'External endpoint not implemented';
+const BACKEND_SECRET = process.env['BACKEND_SECRET'] || '';
 
 
 function auth_login(request, results) {
@@ -13,7 +14,7 @@ function auth_login(request, results) {
 function auth_register(request, results) {
   axios.post(
     'http://localhost:8040/auth/user/register/',
-    {BACKEND_SECRET: ''}
+    {BACKEND_SECRET: BACKEND_SECRET}
   ).then(
     res => {
       results.status(500).json(
