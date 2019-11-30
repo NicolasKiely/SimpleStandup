@@ -221,6 +221,7 @@ class LoginRegisterForm extends Component {
   constructor(props) {
     super(props);
 
+    this.onLogin = props.onLogin;
     this.onSelectLogin = this.onSelectLogin.bind(this);
     this.onSelectRegister = this.onSelectRegister.bind(this);
 
@@ -228,10 +229,6 @@ class LoginRegisterForm extends Component {
       login_form_active: false,
       register_form_active: true
     };
-
-    this.onLogin = function(user_email){
-      console.log('Login callback called for user: ' + user_email);
-    }
   }
 
   onSelectLogin() {
