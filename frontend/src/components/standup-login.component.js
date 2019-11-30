@@ -32,7 +32,7 @@ class LoginForm extends Component {
       url, send_data
     ).then(
       res => {
-        this.setState({error_msg: ''});
+        this.setState({email: '', pass: '', error_msg: ''});
       },
       err => {
         if (err.response) {
@@ -42,7 +42,6 @@ class LoginForm extends Component {
         }
       }
     );
-    this.setState({email: '', pass: ''});
   }
 
   onChangeEmail(e) {
