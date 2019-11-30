@@ -12,9 +12,15 @@ function auth_login(request, results) {
 }
 
 function auth_register(request, results) {
+  const register_data = {
+    BACKEND_SECRET: BACKEND_SECRET,
+    user_email: request.body.register_email,
+    user_pass: request.body.register_pass,
+    user_fname: request.body.register_fname,
+    user_lname: request.body.register_lname
+  };
   axios.post(
-    'http://localhost:8040/auth/user/register/',
-    {BACKEND_SECRET: BACKEND_SECRET}
+    'http://localhost:8040/auth/user/register', register_data
   ).then(
     res => {
       results.status(500).json(

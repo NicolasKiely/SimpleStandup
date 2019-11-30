@@ -125,7 +125,7 @@ class RegisterForm extends Component {
       send_data
     ).then(
       res => {
-        this.setState({error_msg: ''});
+        this.setState({error_msg: '', email: '', pass: '', fname: '', lname: ''});
       },
       err => {
         if (err.response) {
@@ -135,7 +135,6 @@ class RegisterForm extends Component {
         }
       }
     );
-    this.setState({email: '', pass: '', fname: '', lname: ''});
   }
 
   onChangeEmail(e){
