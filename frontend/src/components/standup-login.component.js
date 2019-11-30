@@ -10,6 +10,7 @@ class LoginForm extends Component {
   constructor(props) {
     super(props);
 
+    this.login_callback = props.onLogin;
     this.onSubmit = this.onSubmit.bind(this);
     this.onChangeEmail = this.onChangeEmail.bind(this);
     this.onChangePass = this.onChangePass.bind(this);
@@ -32,6 +33,7 @@ class LoginForm extends Component {
       url, send_data
     ).then(
       res => {
+        this.login_callback(res.data.payload.email);
         this.setState({email: '', pass: '', error_msg: ''});
       },
       err => {
@@ -223,6 +225,10 @@ class LoginRegisterForm extends Component {
     this.state = {
       login_form_active: false,
       register_form_active: true
+    };
+
+    this.onLogin = function(user_email){
+      console.log('Login callback called for user: ' + user_email);
     }
   }
 
@@ -271,10 +277,10 @@ class LoginRegisterForm extends Component {
         </div>
 
         <div className="login-register-body" style={login_form_style}>
-          <LoginForm active="true" />
+          <LoginForm active="true" onLogin={this.onLogin} />
         </div>
         <div className="login-register-body" style={register_form_style}>
-          <RegisterForm />
+          <RegisterForm onRegister={this.onLogin}/>
         </div>
       </div>
     );

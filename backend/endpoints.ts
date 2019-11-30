@@ -20,8 +20,12 @@ function auth_login(request, results) {
   ).then(
     res => {
       let ext_status = res.data.status || 500;
+      let ext_payload = res.data.status == 200 ? {'email': res.data.payload.email} : {};
       results.status(ext_status).json(
-        {'payload': {}, 'error': res.data.error, 'message': res.data.message}
+        {
+          'payload': ext_payload, 'error': res.data.error,
+          'message': res.data.message
+        }
       );
     },
     err => {
