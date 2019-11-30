@@ -104,6 +104,7 @@ class RegisterForm extends Component {
   constructor(props){
     super(props);
 
+    this.loginCallback = props.onRegister;
     this.onSubmit = this.onSubmit.bind(this);
     this.onChangeEmail = this.onChangeEmail.bind(this);
     this.onChangePass = this.onChangePass.bind(this);
@@ -126,6 +127,7 @@ class RegisterForm extends Component {
       send_data
     ).then(
       res => {
+        this.loginCallback(res.data.payload.email);
         this.setState({error_msg: '', email: '', pass: '', fname: '', lname: ''});
       },
       err => {

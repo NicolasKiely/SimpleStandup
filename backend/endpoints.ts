@@ -54,8 +54,9 @@ function auth_register(request, results) {
   ).then(
     res => {
       let ext_message = res.data.message || 'Account successfully registered!';
+      let ext_payload = res.data.status == 200 ? {'email': res.data.payload.email} : {};
       results.status(200).json(
-        {'payload': {}, 'message': ext_message}
+        {'payload': ext_payload, 'message': ext_message}
       );
     },
     err => {
