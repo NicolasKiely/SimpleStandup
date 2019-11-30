@@ -23,8 +23,9 @@ function auth_register(request, results) {
     'http://localhost:8040/auth/user/register', register_data
   ).then(
     res => {
-      results.status(500).json(
-        {'payload': {}, 'error': ERR_NOT_IMPLEMENTED, 'message': MSG_NOT_IMPLEMENTED}
+      let ext_message = res.data.message || 'Account successfully registered!';
+      results.status(200).json(
+        {'payload': {}, 'message': ext_message}
       );
     },
     err => {
