@@ -34,7 +34,7 @@ class LoginForm extends Component {
     ).then(
       res => {
         this.login_callback(res.data.payload.email);
-        this.setState({email: '', pass: '', error_msg: ''});
+        this.setState({error_msg: ''});
       },
       err => {
         if (err.response) {
@@ -128,7 +128,7 @@ class RegisterForm extends Component {
     ).then(
       res => {
         this.loginCallback(res.data.payload.email);
-        this.setState({error_msg: '', email: '', pass: '', fname: '', lname: ''});
+        this.setState({error_msg: ''});
       },
       err => {
         if (err.response) {

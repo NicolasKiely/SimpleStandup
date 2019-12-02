@@ -24,5 +24,5 @@ connection.once(
 );
 
 app.listen(PORT, function(err) {
-    console.log('[index.ts] Server is running on PORT: ' + PORT);
+  console.log('[index.ts] Server is running on PORT: ' + PORT);
 });
