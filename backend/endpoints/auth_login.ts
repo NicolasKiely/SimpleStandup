@@ -46,13 +46,8 @@ function internal_login_callback(http_results, int_login_results) {
     model_schema.UserProfile.find(
       {email: user_email},
     ).then(
-      model => {
-        console.log("Query Results: " + model);
-        if (model.length === 0){
-          console.log("No results for account");
-        } else {
-          console.log("Found account");
-        }
+      models => {
+        search_for_user(models, user_email);
       }
     );
   }
@@ -63,6 +58,36 @@ function internal_login_callback(http_results, int_login_results) {
       'message': int_login_results.data.message
     }
   );
+}
+
+
+/**
+ * Handles search query for user
+ * @param models List of users returned from query, either 0 or 1
+ * @param user_email Email address of user
+ */
+function search_for_user(models, user_email: String){
+  console.log("Query Results: " + models);
+  if (models.length === 0){
+    console.log("No results for account");
+    let new_model = model_schema.UserProfile({
+      email: user_email
+    });
+    new_model.save().then(
+      new_user => {
+        handle_user(new_user);
+      }
+    );
+
+  } else {
+    console.log("Found account");
+    handle_user(models[0]);
+  }
+}
+
+
+function handle_user(user){
+  console.log('Processing account ' + user.email);
 }
 
 
