@@ -10,8 +10,9 @@ export default class StandupIndex extends Component {
       logged_in: false,
     };
 
-    this.onLogin = function(user_email){
+    this.onLogin = function(user_email, token){
       console.log('Login callback called for user: ' + user_email);
+      console.log('Login token: ' + token);
     }
   }
 

@@ -1,4 +1,5 @@
 import axios from "axios";
+import * as uuid from "uuid";
 
 import * as model_schema from "../schema";
 import * as utils from '../utils'
@@ -39,25 +40,29 @@ function internal_login_callback(http_results, int_login_results) {
   let ext_status = int_login_results.data.status || 500;
   let ext_payload = {};
 
-  if (int_login_results.data.status == 200){
-    /* Log user in */
-    const user_email = int_login_results.data.payload.email;
-    ext_payload['email'] = user_email;
-    model_schema.UserProfile.find(
-      {email: user_email},
-    ).then(
-      models => {
-        search_for_user(models, user_email);
+  function final_callback(user) {
+    http_results.status(ext_status).json(
+      {
+        'payload': ext_payload, 'error': int_login_results.data.error,
+        'message': int_login_results.data.message
       }
     );
   }
 
-  http_results.status(ext_status).json(
-    {
-      'payload': ext_payload, 'error': int_login_results.data.error,
-      'message': int_login_results.data.message
-    }
-  );
+  if (int_login_results.data.status == 200){
+    /* Log user in */
+    const user_email = int_login_results.data.payload.email;
+    ext_payload['email'] = user_email;
+    ext_payload['token'] = uuid.v4();
+
+    model_schema.UserProfile.find(
+      {email: user_email},
+    ).then(
+      models => {
+        search_for_user(models, user_email, final_callback);
+      }
+    );
+  }
 }
 
 
@@ -66,28 +71,27 @@ function internal_login_callback(http_results, int_login_results) {
  * @param models List of users returned from query, either 0 or 1
  * @param user_email Email address of user
  */
-function search_for_user(models, user_email: String){
+function search_for_user(models, user_email: String, callback){
   console.log("Query Results: " + models);
   if (models.length === 0){
-    console.log("No results for account");
     let new_model = model_schema.UserProfile({
       email: user_email
     });
     new_model.save().then(
       new_user => {
-        handle_user(new_user);
+        handle_user(new_user, callback);
       }
     );
 
   } else {
-    console.log("Found account");
-    handle_user(models[0]);
+    handle_user(models[0], callback);
   }
 }
 
 
-function handle_user(user){
+function handle_user(user, callback){
   console.log('Processing account ' + user.email);
+  callback(user);
 }
 
 

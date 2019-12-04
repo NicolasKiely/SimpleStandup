@@ -33,7 +33,7 @@ class LoginForm extends Component {
       url, send_data
     ).then(
       res => {
-        this.login_callback(res.data.payload.email);
+        this.login_callback(res.data.payload.email, res.data.payload.token);
         this.setState({error_msg: ''});
       },
       err => {
@@ -127,7 +127,7 @@ class RegisterForm extends Component {
       send_data
     ).then(
       res => {
-        this.loginCallback(res.data.payload.email);
+        this.loginCallback(res.data.payload.email, res.data.payload.token);
         this.setState({error_msg: ''});
       },
       err => {
