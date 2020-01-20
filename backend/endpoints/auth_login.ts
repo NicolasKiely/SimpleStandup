@@ -23,9 +23,19 @@ function auth_login(http_request, http_results) {
   ).then(
     res => {internal_login_callback(http_results, res)},
     err => {
-      let ext_status = err.response.data.status || 500;
+      let ext_status, message, error_message;
+      if (err.response === undefined){
+        console.error("Unexpected connection error with internal backend");
+        ext_status = 500;
+        message = "Internal error";
+        error_message = "internal_error";
+      } else {
+        ext_status = err.response.data.status || 500;
+        message = err.response.data.message;
+        error_message = err.response.data.error;
+      }
       http_results.status(ext_status).json(
-        {'payload': {}, 'error': err.response.data.error, 'message': err.response.data.message}
+        {'payload': {}, 'error': error_message, 'message': message}
       );
     }
   );
@@ -62,6 +72,9 @@ function internal_login_callback(http_results, int_login_results) {
         search_for_user(models, user_email, final_callback);
       }
     );
+  } else {
+    /* Invalid login */
+    final_callback(undefined);
   }
 }
 

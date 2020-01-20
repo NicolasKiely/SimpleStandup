@@ -33,13 +33,23 @@ class LoginForm extends Component {
       url, send_data
     ).then(
       res => {
-        this.login_callback(res.data.payload.email, res.data.payload.token);
-        this.setState({error_msg: ''});
+        if (res.data.payload.email){
+          console.log("User logged in");
+          this.login_callback(res.data.payload.email, res.data.payload.token);
+          this.setState({error_msg: ''});
+
+        } else {
+          console.log("Could not log in");
+          let error_msg = res.data.message || "Could not authenticate user";
+          this.setState({error_msg: error_msg});
+        }
       },
       err => {
         if (err.response) {
+          console.log("Failed to log in");
           this.setState({error_msg: err.response.data.message});
         } else {
+          console.log("No error response");
           this.setState({error_msg: err})
         }
       }
