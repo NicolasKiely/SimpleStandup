@@ -9,10 +9,8 @@ export default class StandupIndex extends Component {
     let first_token = localStorage.getItem("login_token");
     let first_logged_in;
     if (first_token){
-      console.log("Logged in with token " + first_token);
       first_logged_in = true;
     } else {
-      console.log("Not logged in yet");
       first_logged_in = false;
     }
 
@@ -30,27 +28,21 @@ export default class StandupIndex extends Component {
   }
 
   render() {
+    let main_body;
     if (this.state.logged_in){
-      return (
-        <div style={{marginTop: 10}}>
-          <div className="row">
-            <div className="col-sm-12 col-md-8 col-lg-6 offset-md-2 offset-lg-3">
-
-            </div>
-          </div>
-        </div>
-      )
+      main_body = <p>Logged in</p>;
 
     } else {
-      return (
-        <div style={{marginTop: 10}}>
-          <div className="row">
-            <div className="col-sm-12 col-md-8 col-lg-6 offset-md-2 offset-lg-3">
-              <LoginRegisterForm onLogin={this.onLogin} />
-            </div>
+      main_body = <LoginRegisterForm onLogin={this.onLogin}/>;
+    }
+    return (
+      <div style={{marginTop: 10}}>
+        <div className="row">
+          <div className="col-sm-12 col-md-8 col-lg-6 offset-md-2 offset-lg-3">
+            {main_body}
           </div>
         </div>
-      );
-    }
+      </div>
+    );
   }
 }

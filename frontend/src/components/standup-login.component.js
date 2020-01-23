@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import axios from 'axios';
+import {Redirect} from 'react-router-dom';
 import {get_backend_url} from '../utils'
 
 
@@ -18,7 +19,8 @@ class LoginForm extends Component {
     this.state = {
       email: '',
       pass: '',
-      error_msg: ''
+      error_msg: '',
+      redirect: false
     }
   }
 
@@ -36,7 +38,7 @@ class LoginForm extends Component {
         if (res.data.payload.email){
           console.log("User logged in");
           this.login_callback(res.data.payload.email, res.data.payload.token);
-          this.setState({error_msg: ''});
+          this.setState({error_msg: '', redirect: true});
 
         } else {
           console.log("Could not log in");
@@ -67,6 +69,10 @@ class LoginForm extends Component {
   render(){
     const error_msg = '' + this.state.error_msg;
     const error_style = error_msg ? {} : {display: 'none'};
+    const redirect_el = this.state.redirect
+      ? [<Redirect to="/" key="login_redirect" />]
+      : []
+    ;
 
     return (
       <div>
@@ -101,6 +107,7 @@ class LoginForm extends Component {
             />
           </div>
         </form>
+        {redirect_el}
       </div>
     );
   }
