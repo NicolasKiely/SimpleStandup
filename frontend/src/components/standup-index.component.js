@@ -6,15 +6,11 @@ export default class StandupIndex extends Component {
     super(props);
 
     let first_token = localStorage.getItem("login_token");
-    let first_logged_in;
-    if (first_token){
-      first_logged_in = true;
-    } else {
-      first_logged_in = false;
-    }
+    let first_logged_in = !!first_token;
 
     this.state = {
       logged_in: first_logged_in,
+      display_new_channel_form: false
     };
 
     this.onLogin = function(user_email, token){
@@ -27,30 +23,51 @@ export default class StandupIndex extends Component {
 
     this.onEditNewChannel = function(){
       console.log("Setup new channel");
+      this.setState(
+        {display_new_channel_form: !this.state.display_new_channel_form}
+      );
     };
     this.onEditNewChannel = this.onEditNewChannel.bind(this);
 
-    this.onCreateNewChannel = function(){
+    this.onCreateNewChannel = function(e){
+      e.preventDefault();
       console.log("Create new channel");
-    }
+    };
     this.onCreateNewChannel = this.onCreateNewChannel.bind(this);
   }
 
   render() {
     let main_body;
     main_body = <p>Logged in</p>;
+    let display_new_channel_form_class = this.state.display_new_channel_form ?
+      "channel-list-form" : "channel-list-form-hidden";
+    let new_channel_button_text = this.state.display_new_channel_form ?
+      "Cancel" : "Create New Channel";
 
     return (
       <div style={{marginTop: 10}}>
-        <div className="channel-list-form">
+        <div className="channel-list-form-container">
           {main_body}
 
-          <button type="button" className="btn btn-block btn-primary" onClick={this.onEditNewChannel}>
-            Create New Channel
+          <button type="button" className="btn btn-block btn-secondary" onClick={this.onEditNewChannel}>
+            {new_channel_button_text}
           </button>
-          <form onSubmit={this.onCreateNewChannel}>
 
-          </form>
+          <div className={display_new_channel_form_class}>
+            <form onSubmit={this.onCreateNewChannel} className="form-horizontal">
+              <div className="form-group row">
+                <label className="col-sm-2 control-label">Channel Name:</label>
+                <div className="col-sm-6">
+                  <input name="channel-name" type="text" className="form-control"/>
+                </div>
+
+                <div className="form-group col-sm-2">
+                  <button type="submit" className="btn btn-primary">Submit</button>
+                </div>
+              </div>
+            </form>
+          </div>
+
         </div>
       </div>
     );

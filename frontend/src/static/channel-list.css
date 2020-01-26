@@ -2,13 +2,27 @@
  * Styling for channel list form
  */
 
-div.channel-list-form {
+div.channel-list-form-container {
     border: #F8F8F8 solid 2px;
     border-radius: 8px;
-    padding: 0;
-    margin: 10px;
+    padding: 10px;
+    margin: 2px;
     border-collapse: collapse;
     box-sizing: border-box;
     min-width: 160px;
     background-color: #FDFDFD;
+}
+
+div.channel-list-form-hidden {
+    height: 0;
+    transition: height 100ms, transform 100ms;
+    transform: scaleY(0);
+}
+
+div.channel-list-form {
+    padding-top: 10px;
+    height: 80px;
+    transition: height 100ms, transform 100ms;
+    transform: scaleY(1);
+    display: block;
 }
