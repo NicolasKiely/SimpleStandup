@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import LoginRegisterForm from "./standup-login.component"
 
 
 export default class StandupIndex extends Component {
@@ -25,22 +24,33 @@ export default class StandupIndex extends Component {
       localStorage.setItem("login_token", token);
     };
     this.onLogin = this.onLogin.bind(this);
+
+    this.onEditNewChannel = function(){
+      console.log("Setup new channel");
+    };
+    this.onEditNewChannel = this.onEditNewChannel.bind(this);
+
+    this.onCreateNewChannel = function(){
+      console.log("Create new channel");
+    }
+    this.onCreateNewChannel = this.onCreateNewChannel.bind(this);
   }
 
   render() {
     let main_body;
-    if (this.state.logged_in){
-      main_body = <p>Logged in</p>;
+    main_body = <p>Logged in</p>;
 
-    } else {
-      main_body = <LoginRegisterForm onLogin={this.onLogin}/>;
-    }
     return (
       <div style={{marginTop: 10}}>
-        <div className="row">
-          <div className="col-sm-12 col-md-8 col-lg-6 offset-md-2 offset-lg-3">
-            {main_body}
-          </div>
+        <div className="channel-list-form">
+          {main_body}
+
+          <button type="button" className="btn btn-block btn-primary" onClick={this.onEditNewChannel}>
+            Create New Channel
+          </button>
+          <form onSubmit={this.onCreateNewChannel}>
+
+          </form>
         </div>
       </div>
     );

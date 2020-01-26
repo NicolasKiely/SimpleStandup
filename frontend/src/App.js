@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {BrowserRouter as Router, Route, Link, Redirect} from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./static/login.css";
+import "./static/channel-list.css";
 
 import StandupIndex from "./components/standup-index.component";
 import LoginRegisterForm from "./components/standup-login.component";
