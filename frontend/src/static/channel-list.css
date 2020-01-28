@@ -20,8 +20,8 @@ div.channel-list-form-hidden {
 }
 
 div.channel-list-form {
-    padding-top: 10px;
-    height: 80px;
+    margin-top: 20px;
+    height: 40px;
     transition: height 100ms, transform 100ms;
     transform: scaleY(1);
     display: block;

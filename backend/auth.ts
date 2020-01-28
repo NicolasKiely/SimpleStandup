@@ -9,6 +9,7 @@ import * as model_schema from "./schema";
 function authenticate_user(user_email, user_token){
   return new Promise(
     (resolve, reject) => {
+      console.log("Searching for user " + user_email);
       model_schema.UserProfile.find(
         {email: user_email}
       ).then(
@@ -37,6 +38,7 @@ function authenticate_user_search(models, user_token, resolve, reject){
   } else {
     /* User found, check token */
     const user_model = models[0];
+    console.log("Found user " + user_model);
     if (user_model.token === user_token){
       console.log("User authenticated");
       resolve(user_model)

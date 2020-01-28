@@ -1,37 +1,44 @@
 import React, {Component} from 'react';
+import axios from 'axios';
+import {get_backend_url} from "../utils";
 
 
 export default class StandupIndex extends Component {
   constructor(props) {
     super(props);
 
-    let first_token = localStorage.getItem("login_token");
-    let first_logged_in = !!first_token;
-
     this.state = {
-      logged_in: first_logged_in,
-      display_new_channel_form: false
+      display_new_channel_form: false,
+      user_email: props.user_email,
+      user_token: props.user_token
     };
 
-    this.onLogin = function(user_email, token){
-      console.log('Login callback called for user: ' + user_email);
-      console.log('Login token: ' + token);
-      this.setState({logged_in: true});
-      localStorage.setItem("login_token", token);
-    };
-    this.onLogin = this.onLogin.bind(this);
-
+    /* Click handler for opening/closing form for new channels */
     this.onEditNewChannel = function(){
-      console.log("Setup new channel");
       this.setState(
         {display_new_channel_form: !this.state.display_new_channel_form}
       );
     };
     this.onEditNewChannel = this.onEditNewChannel.bind(this);
 
+    /* Handler for submiting request to create new channel */
     this.onCreateNewChannel = function(e){
       e.preventDefault();
-      console.log("Create new channel");
+      console.log("Creating new channel...");
+      const send_data = {
+        user_email: this.state.user_email, user_token: ""
+      };
+
+      const url = get_backend_url('/api/1/channels');
+      axios.put(url, send_data).then(
+        res => {
+          console.log("Created new channel!");
+        },
+        err => {
+          console.log("Failed to create channel");
+          console.log(err);
+        }
+      )
     };
     this.onCreateNewChannel = this.onCreateNewChannel.bind(this);
   }
@@ -39,35 +46,41 @@ export default class StandupIndex extends Component {
   render() {
     let main_body;
     main_body = <p>Logged in</p>;
-    let display_new_channel_form_class = this.state.display_new_channel_form ?
+    const display_new_channel_form_class = this.state.display_new_channel_form ?
       "channel-list-form" : "channel-list-form-hidden";
-    let new_channel_button_text = this.state.display_new_channel_form ?
+    const new_channel_button_text = this.state.display_new_channel_form ?
       "Cancel" : "Create New Channel";
+    const new_channel_button_class = this.state.display_new_channel_form ?
+      "btn btn-block btn-outline-secondary" : "btn btn-block btn-secondary";
+
+    /* Form elements for creating new channel */
+    const new_channel_form = <div>
+      <button type="button" className={new_channel_button_class} onClick={this.onEditNewChannel}>
+        {new_channel_button_text}
+      </button>
+
+      <div className={display_new_channel_form_class}>
+        <form onSubmit={this.onCreateNewChannel} className="form-horizontal">
+          <div className="form-group row">
+            <label className="col-sm-2 control-label">Channel Name:</label>
+            <div className="col-sm-8">
+              <input name="channel-name" type="text" className="form-control"/>
+            </div>
+
+            <div className="form-group col-sm-2">
+              <button type="submit" className="btn btn-primary">Submit</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>;
 
     return (
       <div style={{marginTop: 10}}>
         <div className="channel-list-form-container">
           {main_body}
 
-          <button type="button" className="btn btn-block btn-secondary" onClick={this.onEditNewChannel}>
-            {new_channel_button_text}
-          </button>
-
-          <div className={display_new_channel_form_class}>
-            <form onSubmit={this.onCreateNewChannel} className="form-horizontal">
-              <div className="form-group row">
-                <label className="col-sm-2 control-label">Channel Name:</label>
-                <div className="col-sm-6">
-                  <input name="channel-name" type="text" className="form-control"/>
-                </div>
-
-                <div className="form-group col-sm-2">
-                  <button type="submit" className="btn btn-primary">Submit</button>
-                </div>
-              </div>
-            </form>
-          </div>
-
+          {new_channel_form}
         </div>
       </div>
     );

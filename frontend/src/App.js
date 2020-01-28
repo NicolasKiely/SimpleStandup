@@ -13,31 +13,42 @@ class App extends Component {
 
     let first_token = localStorage.getItem("login_token");
     let first_logged_in;
+    let first_email = localStorage.getItem("login_email");
 
     if (first_token){
-      console.log("Logged in with token " + first_token);
+      console.log("Logged in "+ first_email +" with token " + first_token);
       first_logged_in = true;
     } else {
       console.log("Not logged in yet");
       first_logged_in = false;
+      first_email = undefined;
+      first_token = undefined;
     }
 
     this.state = {
       logged_in: first_logged_in,
+      user_email: first_email,
+      user_token: first_token
     };
 
     this.onLogin = function(user_email, token){
       console.log('Login callback called for user: ' + user_email);
       console.log('Login token: ' + token);
-      this.setState({logged_in: true});
+      this.setState(
+        {logged_in: true, user_email: user_email, user_token: token}
+      );
       localStorage.setItem("login_token", token);
+      localStorage.setItem("login_email", user_email);
     };
     this.onLogin = this.onLogin.bind(this);
 
     this.onLogout = function(){
       console.log("Logging out ...");
       localStorage.removeItem("login_token");
-      this.setState({logged_in: false});
+      localStorage.removeItem("login_email");
+      this.setState(
+        {logged_in: false, user_email: undefined, user_token: undefined}
+      );
     };
     this.onLogout = this.onLogout.bind(this);
   }
@@ -74,7 +85,7 @@ class App extends Component {
         </div>
       </Route>,
       <Route path="/" exact key="/">
-        <StandupIndex />
+        <StandupIndex user_email={this.state.user_email} user_token={this.state.user_token}/>
       </Route>
     ];
     if (!this.state.logged_in){

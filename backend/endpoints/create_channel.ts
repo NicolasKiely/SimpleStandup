@@ -10,6 +10,7 @@ import * as auth from "../auth"
 function create_channel(http_request, http_results){
   const user_token = http_request.body.user_token;
   const user_email = http_request.body.user_email;
+  console.log("Attempting to create channel for " + user_email);
 
   auth.authenticate_user(user_email, undefined).then(
     user => {
