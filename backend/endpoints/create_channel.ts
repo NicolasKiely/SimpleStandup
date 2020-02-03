@@ -22,13 +22,19 @@ function create_channel(http_request, http_results){
     user => {
       if (user === undefined){
         console.log("No user to create channel for");
+        http_results.status(500).json(
+          {"payload": {}, "error": "NOT_IMPLEMENTED", "message": "Endpoint is not finished"}
+        );
+
+      } else if (auth.user_token_expired(user)){
+        console.log("User token expired");
+
       } else {
         console.log("Failed to authenticate user");
+        http_results.status(500).json(
+          {"payload": {}, "error": "NOT_IMPLEMENTED", "message": "Endpoint is not finished"}
+        );
       }
-
-      http_results.status(500).json(
-        {"payload": {}, "error": "NOT_IMPLEMENTED", "message": "Endpoint is not finished"}
-      );
     }
   );
 }
