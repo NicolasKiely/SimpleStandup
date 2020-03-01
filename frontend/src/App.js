@@ -51,6 +51,13 @@ class App extends Component {
       );
     };
     this.onLogout = this.onLogout.bind(this);
+
+    /** Global event handler for requests to backend */
+    this.global_handler = function(event){
+      if (event !== undefined){
+        console.log("Global event handler status " + event);
+      }
+    }
   }
 
   render() {
@@ -85,7 +92,9 @@ class App extends Component {
         </div>
       </Route>,
       <Route path="/" exact key="/">
-        <StandupIndex user_email={this.state.user_email} user_token={this.state.user_token}/>
+        <StandupIndex user_email={this.state.user_email} user_token={this.state.user_token}
+                      global_handler={this.global_handler}
+        />
       </Route>
     ];
     if (!this.state.logged_in){

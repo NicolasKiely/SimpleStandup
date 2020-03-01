@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
-import axios from 'axios';
-import {get_backend_url} from "../utils";
+import {post_backend_endpoint} from "../utils";
 
 
 export default class StandupIndex extends Component {
@@ -29,8 +28,9 @@ export default class StandupIndex extends Component {
         user_email: this.state.user_email, user_token: ""
       };
 
-      const url = get_backend_url('/api/1/channels');
-      axios.put(url, send_data).then(
+      // const url = get_backend_url('/api/1/channels');
+      //axios.put(url, send_data).then(
+      post_backend_endpoint("/api/1/channels", props.global_handler, send_data).then(
         res => {
           console.log("Created new channel!");
         },

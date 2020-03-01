@@ -7,6 +7,9 @@ import * as utils from '../utils'
 import * as auth from "../auth"
 
 
+/**
+ * Entry point to create channel
+ */
 function create_channel(http_request, http_results){
   const user_token = http_request.body.user_token;
   const user_email = http_request.body.user_email;
@@ -28,6 +31,9 @@ function create_channel(http_request, http_results){
 
       } else if (auth.user_token_expired(user)){
         console.log("User token expired");
+        http_results.status(401).json(
+          {"payload": {}, "error": "TOKEN_EXPIRED", "message": "Please log in"}
+        );
 
       } else {
         console.log("Failed to authenticate user");
