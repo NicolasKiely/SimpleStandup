@@ -28,7 +28,8 @@ class App extends Component {
     this.state = {
       logged_in: first_logged_in,
       user_email: first_email,
-      user_token: first_token
+      user_token: first_token,
+      prefer_login: false
     };
 
     this.onLogin = function(user_email, token){
@@ -58,7 +59,7 @@ class App extends Component {
         const status = event.response ? event.response.status : 0;
         if (status === 401 && this.state.logged_in){
           // Token expired
-          this.setState({logged_in: false});
+          this.setState({logged_in: false, prefer_login: true});
         }
       }
     };
@@ -91,7 +92,7 @@ class App extends Component {
         <div style={{marginTop: 10}}>
           <div className="row">
             <div className="col-sm-12 col-md-8 col-lg-6 offset-md-2 offset-lg-3">
-              <LoginRegisterForm onLogin={this.onLogin}/>
+              <LoginRegisterForm onLogin={this.onLogin} prefer_login={this.state.prefer_login}/>
             </div>
           </div>
         </div>

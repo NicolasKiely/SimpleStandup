@@ -243,8 +243,8 @@ class LoginRegisterForm extends Component {
     this.onSelectRegister = this.onSelectRegister.bind(this);
 
     this.state = {
-      login_form_active: false,
-      register_form_active: true
+      login_form_active: props.prefer_login,
+      register_form_active: !props.prefer_login
     };
   }
 

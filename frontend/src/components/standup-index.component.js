@@ -36,7 +36,6 @@ export default class StandupIndex extends Component {
         },
         err => {
           console.log("Failed to create channel");
-          console.log(err);
         }
       )
     };
