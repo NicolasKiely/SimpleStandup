@@ -55,9 +55,14 @@ class App extends Component {
     /** Global event handler for requests to backend */
     this.global_handler = function(event){
       if (event !== undefined){
-        console.log("Global event handler status " + event);
+        const status = event.response ? event.response.status : 0;
+        if (status === 401 && this.state.logged_in){
+          // Token expired
+          this.setState({logged_in: false});
+        }
       }
-    }
+    };
+    this.global_handler = this.global_handler.bind(this);
   }
 
   render() {

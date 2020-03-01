@@ -17,17 +17,15 @@ function get_backend_url(path) {
  * Returns promise that calls endpoint
  * @param path Internal backend endpoint
  * @param event_handler Global event handler
+ * @param method HTTP method (get, post, put)
  * @param send_data Optional data to send
  */
-function post_backend_endpoint(path, event_handler, send_data){
+function backend_request(path, event_handler, method, send_data){
+  const _method = method || "GET";
+
   const hdlr = (resolve, reject) => {
     const url = get_backend_url(path);
-    let poster;
-    if (send_data === undefined){
-      poster = axios.post(url);
-    } else {
-      poster = axios.post(url, send_data)
-    }
+    const poster = axios({method: _method, url: url, data: send_data});
     poster.then(
       (results) => {
         resolve(results);
@@ -42,4 +40,4 @@ function post_backend_endpoint(path, event_handler, send_data){
 }
 
 
-export {get_backend_url, post_backend_endpoint};
+export {get_backend_url, backend_request};
