@@ -9,7 +9,8 @@ export default class StandupIndex extends Component {
     this.state = {
       display_new_channel_form: false,
       user_email: props.user_email,
-      user_token: props.user_token
+      user_token: props.user_token,
+      channel_name: ""
     };
 
     /* Click handler for opening/closing form for new channels */
@@ -25,7 +26,8 @@ export default class StandupIndex extends Component {
       e.preventDefault();
       console.log("Creating new channel...");
       const send_data = {
-        user_email: this.state.user_email, user_token: this.state.user_token
+        user_email: this.state.user_email, user_token: this.state.user_token,
+        channel_name: this.state.channel_name
       };
 
       backend_request("/api/1/channels", props.global_handler, "PUT", send_data).then(
@@ -38,6 +40,12 @@ export default class StandupIndex extends Component {
       )
     };
     this.onCreateNewChannel = this.onCreateNewChannel.bind(this);
+
+    this.onChangeChannelName = function(e){
+      this.setState({channel_name: e.target.value});
+    };
+
+    this.onChangeChannelName = this.onChangeChannelName.bind(this);
   }
 
   render() {
@@ -61,7 +69,9 @@ export default class StandupIndex extends Component {
           <div className="form-group row">
             <label className="col-sm-2 control-label">Channel Name:</label>
             <div className="col-sm-8">
-              <input name="channel-name" type="text" className="form-control"/>
+              <input name="channel-name" type="text" className="form-control"
+                     onChange={this.onChangeChannelName}
+              />
             </div>
 
             <div className="form-group col-sm-2">

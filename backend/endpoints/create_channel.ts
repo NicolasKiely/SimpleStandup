@@ -33,15 +33,18 @@ function create_channel(http_request, http_results){
  * @param channel_name Name of channel to create
  */
 function auth_success(http_results, user_email, channel_name){
-  console.log("Created channel");
   const request_data = {
-    user: user_email, channel_name: channel_name
+    user_email: user_email,
+    channel_name: channel_name,
+    BACKEND_SECRET: utils.BACKEND_SECRET
   };
   axios.post(utils.get_internal_url("/channel/create"), request_data).then(
     res => {
       channel_created(http_results, res);
     },
-    err => {utils.handle_internal_backend_error(http_results, err);}
+    err => {
+      console.log(err.response.data);
+      utils.handle_internal_backend_error(http_results, err);}
   );
 }
 
@@ -53,6 +56,7 @@ function auth_success(http_results, user_email, channel_name){
  */
 function channel_created(http_results, int_results){
   let ext_status = int_results.data.status || 500;
+  console.log("Created channel");
 
   http_results.status(ext_status).json(
     {
