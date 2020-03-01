@@ -9,7 +9,6 @@ import * as model_schema from "./schema";
 function authenticate_user(user_email, user_token){
   return new Promise(
     (resolve, reject) => {
-      console.log("Searching for user " + user_email);
       model_schema.UserProfile.find(
         {email: user_email}
       ).then(
@@ -32,22 +31,18 @@ function authenticate_user(user_email, user_token){
 function authenticate_user_search(models, user_token, resolve, reject){
   if (models.length === 0){
     /* User not found */
-    console.log("User not found");
     reject(undefined);
 
   } else {
     /* User found, check token */
     const user_model = models[0];
-    console.log("Found user " + user_model);
     if (user_token_expired(user_model)){
       reject(user_model, false);
 
     } else if (user_model.token === user_token){
-      console.log("User authenticated");
       resolve(user_model);
 
     } else {
-      console.log("Failed to authenticate user");
       reject(user_model, true);
     }
   }

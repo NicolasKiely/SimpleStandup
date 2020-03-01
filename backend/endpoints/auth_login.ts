@@ -21,23 +21,8 @@ function auth_login(http_request, http_results) {
   axios.post(
     'http://localhost:8040/auth/user/login', int_request_data
   ).then(
-    res => {internal_login_callback(http_results, res)},
-    err => {
-      let ext_status, message, error_message;
-      if (err.response === undefined){
-        console.error("Unexpected connection error with internal backend");
-        ext_status = 500;
-        message = "Internal error";
-        error_message = "internal_error";
-      } else {
-        ext_status = err.response.data.status || 500;
-        message = err.response.data.message;
-        error_message = err.response.data.error;
-      }
-      http_results.status(ext_status).json(
-        {'payload': {}, 'error': error_message, 'message': message}
-      );
-    }
+    res => {internal_login_callback(http_results, res);},
+    err => {utils.handle_internal_backend_error(http_results, err);}
   );
 }
 
@@ -88,7 +73,6 @@ function internal_login_callback(http_results, int_login_results) {
  * @param callback Handler for returned user model
  */
 function search_for_user(models, user_email: String, new_token: String, callback){
-  console.log("Query Results: " + models);
   let model;
   if (models.length === 0){
     model = model_schema.UserProfile({
@@ -103,7 +87,6 @@ function search_for_user(models, user_email: String, new_token: String, callback
 
 
 function handle_user(user, callback){
-  console.log('Processing account ' + user.email);
   callback(user);
 }
 
