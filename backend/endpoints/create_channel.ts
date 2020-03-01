@@ -14,8 +14,9 @@ function create_channel(http_request, http_results){
   const user_token = http_request.body.user_token;
   const user_email = http_request.body.user_email;
   console.log("Attempting to create channel for " + user_email);
+  console.log("With token " + user_token);
 
-  auth.authenticate_user(user_email, undefined).then(
+  auth.authenticate_user(user_email, user_token).then(
     user => {
       console.log("Created channel");
       http_results.status(500).json(

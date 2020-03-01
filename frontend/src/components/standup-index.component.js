@@ -25,11 +25,9 @@ export default class StandupIndex extends Component {
       e.preventDefault();
       console.log("Creating new channel...");
       const send_data = {
-        user_email: this.state.user_email, user_token: ""
+        user_email: this.state.user_email, user_token: this.state.user_token
       };
 
-      // const url = get_backend_url('/api/1/channels');
-      //axios.put(url, send_data).then(
       backend_request("/api/1/channels", props.global_handler, "PUT", send_data).then(
         res => {
           console.log("Created new channel!");

@@ -62,14 +62,15 @@ function internal_login_callback(http_results, int_login_results) {
   if (int_login_results.data.status == 200){
     /* Log user in */
     const user_email = int_login_results.data.payload.email;
+    const new_token = uuid.v4();
     ext_payload['email'] = user_email;
-    ext_payload['token'] = uuid.v4();
+    ext_payload['token'] = new_token;
 
     model_schema.UserProfile.find(
       {email: user_email},
     ).then(
       models => {
-        search_for_user(models, user_email, final_callback);
+        search_for_user(models, user_email, new_token, final_callback);
       }
     );
   } else {
@@ -83,22 +84,21 @@ function internal_login_callback(http_results, int_login_results) {
  * Handles search query for user
  * @param models List of users returned from query, either 0 or 1
  * @param user_email Email address of user
+ * @param new_token New token to save for user
+ * @param callback Handler for returned user model
  */
-function search_for_user(models, user_email: String, callback){
+function search_for_user(models, user_email: String, new_token: String, callback){
   console.log("Query Results: " + models);
+  let model;
   if (models.length === 0){
-    let new_model = model_schema.UserProfile({
-      email: user_email
+    model = model_schema.UserProfile({
+      email: user_email, token: new_token
     });
-    new_model.save().then(
-      new_user => {
-        handle_user(new_user, callback);
-      }
-    );
-
   } else {
-    handle_user(models[0], callback);
+    model = models[0];
+    model.token = new_token;
   }
+  model.save().then(user => {handle_user(user, callback)});
 }
 
 
