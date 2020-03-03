@@ -1,8 +1,8 @@
 import axios from "axios";
 import * as uuid from "uuid";
 
-import * as model_schema from "../schema";
-import * as utils from '../utils'
+import * as model_schema from "../../schema";
+import * as utils from '../../utils'
 
 
 /**

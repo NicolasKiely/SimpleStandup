@@ -3,8 +3,8 @@
  */
 import axios from "axios";
 
-import * as utils from '../utils'
-import * as auth from "../auth"
+import * as utils from '../../utils'
+import * as auth from "../../auth"
 
 
 /**
@@ -75,8 +75,8 @@ function channel_created(http_results, int_results){
 function auth_failed(http_results, user){
   if (user === undefined){
     console.log("No user to create channel for");
-    http_results.status(500).json(
-      {"payload": {}, "error": "NOT_IMPLEMENTED", "message": "Endpoint is not finished"}
+    http_results.status(401).json(
+      {"payload": {}, "error": "INVALID_AUTH", "message": "Failed to authenticate user"}
     );
 
   } else if (auth.user_token_expired(user)){
@@ -87,8 +87,8 @@ function auth_failed(http_results, user){
 
   } else {
     console.log("Failed to authenticate user");
-    http_results.status(500).json(
-      {"payload": {}, "error": "NOT_IMPLEMENTED", "message": "Endpoint is not finished"}
+    http_results.status(401).json(
+      {"payload": {}, "error": "INVALID_AUTH", "message": "Failed to authenticate user"}
     );
   }
 }

@@ -14,7 +14,7 @@ export default class StandupIndex extends Component {
       error_msg: ""
     };
 
-    /* Click handler for opening/closing form for new channels */
+    /* Click handler for opening/closing form for new channel */
     this.onEditNewChannel = function(){
       this.setState(
         {display_new_channel_form: !this.state.display_new_channel_form}
@@ -31,10 +31,10 @@ export default class StandupIndex extends Component {
         channel_name: this.state.channel_name
       };
 
-      backend_request("/api/1/channels", props.global_handler, "PUT", send_data).then(
-        res => {
+      backend_request("/api/1/channel", props.global_handler, "PUT", send_data).then(
+        () => {
           console.log("Created new channel!");
-          this.setState({error_msg: ""});
+          this.setState({error_msg: "", display_new_channel_form: false});
         },
         err => {
           const error_msg = err.response && err.response.data ?
