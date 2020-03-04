@@ -45,11 +45,33 @@ export default class StandupIndex extends Component {
     };
     this.onCreateNewChannel = this.onCreateNewChannel.bind(this);
 
+    /* Channel name field handler */
     this.onChangeChannelName = function(e){
       this.setState({channel_name: e.target.value});
     };
-
     this.onChangeChannelName = this.onChangeChannelName.bind(this);
+
+    /* Fetch existing channels for user */
+    this.fetch_channels = function(){
+      const header = {
+        user_email: this.state.user_email,
+        user_token: this.state.user_token
+      };
+      console.log("Fetching channels ...");
+      backend_request("/api/1/channels", props.global_handler, "GET", undefined, header).then(
+        (response) => {
+          console.log("Got results:");
+          console.log(response)
+        },
+        err => {
+          const error_msg = err.response && err.response.data ?
+            err.response.data.message: "Failed to fetch list of channels";
+          this.setState({error_msg: error_msg});
+        }
+      );
+    };
+    this.fetch_channels();
+
   }
 
   render() {

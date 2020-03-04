@@ -10,8 +10,8 @@ import axios from "axios";
  * Entry points to return list of channels for a user
  */
 function list_channels(http_request, http_results){
-  const user_token = http_request.body.user_token;
-  const user_email = http_request.body.user_email;
+  const user_token = http_request.headers["user_token"];
+  const user_email = http_request.headers["user_email"];
   auth.authenticate_user(user_email, user_token).then(
     user => {
       auth_success(http_results, user_email);
@@ -25,10 +25,10 @@ function list_channels(http_request, http_results){
 
 function auth_success(http_results, user_email){
   const request_data = {
-    user_email: user_email,
-    BACKEND_SECRET: utils.BACKEND_SECRET
+    "X-USER-EMAIL": user_email,
+    "X-BACKEND-SECRET": utils.BACKEND_SECRET
   };
-  axios.post(utils.get_internal_url("/channel/list"), request_data).then(
+  axios({url: utils.get_internal_url("/channel/list"), headers: request_data, method: "GET"}).then(
     res => {
       handle_internal_response(http_results, res);
     },
