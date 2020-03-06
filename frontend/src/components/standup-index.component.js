@@ -11,7 +11,8 @@ export default class StandupIndex extends Component {
       user_email: props.user_email,
       user_token: props.user_token,
       channel_name: "",
-      error_msg: ""
+      error_msg: "",
+      channels: [],
     };
 
     /* Click handler for opening/closing form for new channel */
@@ -61,7 +62,8 @@ export default class StandupIndex extends Component {
       backend_request("/api/1/channels", props.global_handler, "GET", undefined, header).then(
         (response) => {
           console.log("Got results:");
-          console.log(response)
+          console.log(response.data.payload);
+          this.setState({"channels": response.data.payload});
         },
         err => {
           const error_msg = err.response && err.response.data ?
@@ -95,7 +97,13 @@ export default class StandupIndex extends Component {
             </div>
           </div>
         </div>
-      )
+      );
+    }
+
+    let channel_divs = [];
+    for (const channel of this.state.channels){
+      const channel_name = channel["channel_name"];
+      channel_divs.push(<div key={channel_name}>{channel_name}</div>);
     }
 
     /* Form elements for creating new channel */
@@ -128,6 +136,7 @@ export default class StandupIndex extends Component {
           {error_div}
 
           {main_body}
+          {channel_divs}
 
           {new_channel_form}
         </div>
