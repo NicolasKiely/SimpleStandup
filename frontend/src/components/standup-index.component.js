@@ -1,5 +1,9 @@
+/**
+ * Top level index components
+ */
 import React, {Component} from 'react';
 import {backend_request} from "../utils";
+import ChannelIndexTab from "./standup-channel-tab";
 
 
 export default class StandupIndex extends Component {
@@ -73,7 +77,6 @@ export default class StandupIndex extends Component {
       );
     };
     this.fetch_channels();
-
   }
 
   render() {
@@ -100,10 +103,13 @@ export default class StandupIndex extends Component {
       );
     }
 
+    /* Create list of channels */
     let channel_divs = [];
     for (const channel of this.state.channels){
       const channel_name = channel["channel_name"];
-      channel_divs.push(<div key={channel_name}>{channel_name}</div>);
+      channel_divs.push(
+        <ChannelIndexTab key={channel_name} channel_name={channel_name} />
+      );
     }
 
     /* Form elements for creating new channel */
