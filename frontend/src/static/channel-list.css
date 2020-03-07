@@ -5,12 +5,15 @@
 div.channel-list-form-container {
     border: #F8F8F8 solid 2px;
     border-radius: 8px;
-    padding: 10px;
     margin: 2px;
     border-collapse: collapse;
     box-sizing: border-box;
     min-width: 160px;
     background-color: #FDFDFD;
+}
+
+div.channel-list-form-padded-container {
+    margin: 10px;
 }
 
 div.channel-list-form-hidden {
@@ -25,4 +28,24 @@ div.channel-list-form {
     transition: height 100ms, transform 100ms;
     transform: scaleY(1);
     display: block;
+}
+
+
+/* Channel tab styling */
+div.channel-tab-wrapper {
+    border-bottom: #E0E0E0 solid 1px;
+    background-color: #F6F6F6;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 15px;
+}
+
+div.channel-tab-wrapper:hover {
+    background-color: #FDFDFD;
+}
+
+span.channel-tab-title {
+    font-size: large;
+    font-weight: bold;
+    color: #002040;
 }

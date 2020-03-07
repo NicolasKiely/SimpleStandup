@@ -107,8 +107,12 @@ export default class StandupIndex extends Component {
     let channel_divs = [];
     for (const channel of this.state.channels){
       const channel_name = channel["channel_name"];
+      const channel_owner = channel["owner"];
+      const user_email = this.state["user_email"];
       channel_divs.push(
-        <ChannelIndexTab key={channel_name} channel_name={channel_name} />
+        <ChannelIndexTab key={channel_name} channel_name={channel_name}
+                         channel_owner={channel_owner} user_email={user_email}
+        />
       );
     }
 
@@ -139,12 +143,15 @@ export default class StandupIndex extends Component {
     return (
       <div style={{marginTop: 10}}>
         <div className="channel-list-form-container">
-          {error_div}
+          <div className="channel-list-form-padded-container">
+            {error_div}
+            {main_body}
+          </div>
 
-          {main_body}
           {channel_divs}
-
-          {new_channel_form}
+          <div className="channel-list-form-padded-container">
+            {new_channel_form}
+          </div>
         </div>
       </div>
     );
