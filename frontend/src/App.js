@@ -16,10 +16,8 @@ class App extends Component {
     let first_email = localStorage.getItem("login_email");
 
     if (first_token){
-      console.log("Logged in "+ first_email +" with token " + first_token);
       first_logged_in = true;
     } else {
-      console.log("Not logged in yet");
       first_logged_in = false;
       first_email = undefined;
       first_token = undefined;
@@ -33,8 +31,6 @@ class App extends Component {
     };
 
     this.onLogin = function(user_email, token){
-      console.log('Login callback called for user: ' + user_email);
-      console.log('Login token: ' + token);
       this.setState(
         {logged_in: true, user_email: user_email, user_token: token}
       );
@@ -44,7 +40,6 @@ class App extends Component {
     this.onLogin = this.onLogin.bind(this);
 
     this.onLogout = function(){
-      console.log("Logging out ...");
       localStorage.removeItem("login_token");
       localStorage.removeItem("login_email");
       this.setState(

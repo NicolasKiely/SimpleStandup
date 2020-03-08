@@ -30,6 +30,17 @@ div.channel-list-form {
     display: block;
 }
 
+/* Channel filtering styling */
+div.channel-list-filter-active {
+    border-bottom: solid 2px black;
+}
+
+div.channel-list-filter-inactive {
+    background-color: #DBDBDB;
+    color: #25A;
+    cursor: pointer;
+}
+
 
 /* Channel tab styling */
 div.channel-tab-wrapper {

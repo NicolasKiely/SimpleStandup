@@ -17,6 +17,7 @@ export default class StandupIndex extends Component {
       channel_name: "",
       error_msg: "",
       channels: [],
+      filtering: {"subscribed": true, "my": false, "archive": false}
     };
 
     /* Click handler for opening/closing form for new channel */
@@ -62,7 +63,6 @@ export default class StandupIndex extends Component {
         user_email: this.state.user_email,
         user_token: this.state.user_token
       };
-      console.log("Fetching channels ...");
       backend_request("/api/1/channels", props.global_handler, "GET", undefined, header).then(
         (response) => {
           console.log("Got results:");
@@ -80,8 +80,6 @@ export default class StandupIndex extends Component {
   }
 
   render() {
-    let main_body;
-    main_body = <p>Logged in</p>;
     const display_new_channel_form_class = this.state.display_new_channel_form ?
       "channel-list-form" : "channel-list-form-hidden";
     const new_channel_button_text = this.state.display_new_channel_form ?
@@ -90,6 +88,37 @@ export default class StandupIndex extends Component {
       "btn btn-block btn-outline-secondary" : "btn btn-block btn-secondary";
     const error_msg = this.state.error_msg;
 
+    const subscribedFilterDivClass = this.state.filtering.subscribed ?
+      "col-sm-4 channel-list-filter-active channel-list-filter-left" :
+      "col-sm-4 channel-list-filter-inactive channel-list-filter-left"
+    ;
+    const myFilterDivClass = this.state.filtering.my ?
+      "col-sm-4 channel-list-filter-active channel-list-filter-middle" :
+      "col-sm-4 channel-list-filter-inactive channel-list-filter-middle"
+    ;
+    const archiveFilterDivClass = this.state.filtering.archive ?
+      "col-sm-4 channel-list-filter-active channel-list-filter-right" :
+      "col-sm-4 channel-list-filter-inactive channel-list-filter-right"
+    ;
+
+    /* Top tabs to filter channels */
+    const filtering_tabs = (
+      <div className="channel-list-filter-wrapper">
+        <div className="row">
+          <div className={subscribedFilterDivClass}>
+            <span className="align-left">Subscribed Channels</span>
+          </div>
+          <div className={myFilterDivClass}>
+            <span className="align-center">My Channels</span>
+          </div>
+          <div className={archiveFilterDivClass}>
+            <span className="align-right">Archived Channels</span>
+          </div>
+        </div>
+      </div>
+    );
+
+    /* Show error alert if there is an error */
     let error_div = <div/>;
     if (error_msg){
       error_div =(
@@ -145,7 +174,7 @@ export default class StandupIndex extends Component {
         <div className="channel-list-form-container">
           <div className="channel-list-form-padded-container">
             {error_div}
-            {main_body}
+            {filtering_tabs}
           </div>
 
           {channel_divs}

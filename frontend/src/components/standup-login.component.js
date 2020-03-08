@@ -36,7 +36,6 @@ class LoginForm extends Component {
     ).then(
       res => {
         if (res.data.payload.email){
-          console.log("User logged in");
           this.login_callback(res.data.payload.email, res.data.payload.token);
           this.setState({error_msg: '', redirect: true});
 
