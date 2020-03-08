@@ -77,6 +77,33 @@ export default class StandupIndex extends Component {
       );
     };
     this.fetch_channels();
+
+    /* Filter callbacks */
+    this.onFilterSubscribed = function(){
+      const filtering = {"subscribed": true, "my": false, "archive": false};
+      const filteredChannels = this.state.channels.filter(
+        channel => {return !channel["archive"];}
+      );
+      this.setState({filtering: filtering, filteredChannels: filteredChannels});
+    };
+    this.onFilterSubscribed = this.onFilterSubscribed.bind(this);
+
+    this.onFilterMy = function(){
+      const filtering = {"subscribed": false, "my": true, "archive": false};
+      const filteredChannels = this.state.channels.filter(
+        channel => {
+          return !channel["archive"] && channel["owner"] === this.state.user_email;
+        }
+      );
+      this.setState({filtering: filtering, filteredChannels: filteredChannels});
+    };
+    this.onFilterMy = this.onFilterMy.bind(this);
+
+    this.onFilterArchive = function(){
+      const filtering = {"subscribed": false, "my": false, "archive": true};
+      this.setState({filtering: filtering});
+    };
+    this.onFilterArchive = this.onFilterArchive.bind(this);
   }
 
   render() {
@@ -115,18 +142,18 @@ export default class StandupIndex extends Component {
       <div className="channel-list-filter-wrapper">
         <div className="row no-gutters">
           <div className="col-4">
-            <div className={subscribedFilterDivClass}>
-              <span className="channel-list-filter-header">Subscribed Channels</span>
+            <div className={subscribedFilterDivClass} onClick={this.onFilterSubscribed}>
+              <span className="channel-list-filter-header">Subscribed</span>
             </div>
           </div>
           <div className="col-4">
-            <div className={myFilterDivClass}>
+            <div className={myFilterDivClass} onClick={this.onFilterMy}>
               <span className="channel-list-filter-header">My Channels</span>
             </div>
           </div>
           <div className="col-4">
-            <div className={archiveFilterDivClass}>
-              <span className="channel-list-filter-header">Archived Channels</span>
+            <div className={archiveFilterDivClass} onClick={this.onFilterArchive}>
+              <span className="channel-list-filter-header">Archived</span>
             </div>
           </div>
         </div>
@@ -153,6 +180,15 @@ export default class StandupIndex extends Component {
       const channel_name = channel["channel_name"];
       const channel_owner = channel["owner"];
       const user_email = this.state["user_email"];
+      const archived = channel["archived"];
+      if (this.state.filtering.subscribed){
+        if (archived){continue;}
+      } else if (this.state.filtering.my){
+        if (archived){continue;}
+        if (channel_owner !== user_email){continue}
+      } else {
+        if (!archived){continue;}
+      }
       channel_divs.push(
         <ChannelIndexTab key={channel_name} channel_name={channel_name}
                          channel_owner={channel_owner} user_email={user_email}
