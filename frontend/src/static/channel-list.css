@@ -34,18 +34,29 @@ div.channel-list-form {
 /* Channel tab styling */
 div.channel-tab-wrapper {
     border-bottom: #E0E0E0 solid 1px;
-    background-color: #F6F6F6;
     padding-left: 10px;
     padding-right: 10px;
     padding-bottom: 15px;
 }
 
-div.channel-tab-wrapper:hover {
+div.channel-tab-wrapper-collapsed {
+    background-color: #F6F6F6;
+}
+
+div.channel-tab-wrapper-expanded {
     background-color: #FDFDFD;
+}
+
+div.channel-tab-wrapper-collapsed:hover {
+    background-color: #FAFAFA;
 }
 
 span.channel-tab-title {
     font-size: large;
     font-weight: bold;
     color: #002040;
+}
+
+span.channel-tab-owner {
+    font-size: small;
 }
