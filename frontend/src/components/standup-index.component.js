@@ -88,31 +88,46 @@ export default class StandupIndex extends Component {
       "btn btn-block btn-outline-secondary" : "btn btn-block btn-secondary";
     const error_msg = this.state.error_msg;
 
-    const subscribedFilterDivClass = this.state.filtering.subscribed ?
-      "col-sm-4 channel-list-filter-active channel-list-filter-left" :
-      "col-sm-4 channel-list-filter-inactive channel-list-filter-left"
-    ;
-    const myFilterDivClass = this.state.filtering.my ?
-      "col-sm-4 channel-list-filter-active channel-list-filter-middle" :
-      "col-sm-4 channel-list-filter-inactive channel-list-filter-middle"
-    ;
-    const archiveFilterDivClass = this.state.filtering.archive ?
-      "col-sm-4 channel-list-filter-active channel-list-filter-right" :
-      "col-sm-4 channel-list-filter-inactive channel-list-filter-right"
-    ;
+    const subscribedFilterDivClass = (
+      "channel-list-filter-left channel-list-filter " + (
+      this.state.filtering.subscribed ?
+        "channel-list-filter-active" :
+        "channel-list-filter-inactive"
+      )
+    );
+    const myFilterDivClass = (
+      "channel-list-filter-middle channel-list-filter " + (
+        this.state.filtering.my ?
+          "channel-list-filter-active" :
+          "channel-list-filter-inactive"
+      )
+    );
+    const archiveFilterDivClass = (
+      "channel-list-filter-right channel-list-filter " + (
+        this.state.filtering.archive ?
+          "channel-list-filter-active" :
+          "channel-list-filter-inactive"
+      )
+    );
 
     /* Top tabs to filter channels */
     const filtering_tabs = (
       <div className="channel-list-filter-wrapper">
-        <div className="row">
-          <div className={subscribedFilterDivClass}>
-            <span className="align-left">Subscribed Channels</span>
+        <div className="row no-gutters">
+          <div className="col-4">
+            <div className={subscribedFilterDivClass}>
+              <span className="channel-list-filter-header">Subscribed Channels</span>
+            </div>
           </div>
-          <div className={myFilterDivClass}>
-            <span className="align-center">My Channels</span>
+          <div className="col-4">
+            <div className={myFilterDivClass}>
+              <span className="channel-list-filter-header">My Channels</span>
+            </div>
           </div>
-          <div className={archiveFilterDivClass}>
-            <span className="align-right">Archived Channels</span>
+          <div className="col-4">
+            <div className={archiveFilterDivClass}>
+              <span className="channel-list-filter-header">Archived Channels</span>
+            </div>
           </div>
         </div>
       </div>
@@ -172,9 +187,9 @@ export default class StandupIndex extends Component {
     return (
       <div style={{marginTop: 10}}>
         <div className="channel-list-form-container">
+          {filtering_tabs}
           <div className="channel-list-form-padded-container">
             {error_div}
-            {filtering_tabs}
           </div>
 
           {channel_divs}

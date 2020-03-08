@@ -13,7 +13,6 @@ div.channel-list-form-container {
 }
 
 div.channel-list-form-padded-container {
-    margin: 10px;
 }
 
 div.channel-list-form-hidden {
@@ -30,15 +29,43 @@ div.channel-list-form {
     display: block;
 }
 
+
 /* Channel filtering styling */
+div.channel-list-filter {
+    border-left: #F8F8F8 1px solid;
+    border-right: #F8F8F8 1px solid;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    min-height: 45px;
+}
+
+div.channel-list-filter-left {
+    border-top-left-radius: 8px;
+}
+
+div.channel-list-filter-right {
+    border-top-right-radius: 8px;
+}
+
 div.channel-list-filter-active {
-    border-bottom: solid 2px black;
+    background-color: #F6F6F6;
 }
 
 div.channel-list-filter-inactive {
     background-color: #DBDBDB;
     color: #25A;
     cursor: pointer;
+}
+
+div.channel-list-filter-active span {
+    border-bottom: solid 2px black;
+}
+
+span.channel-list-filter-header {
+    font-weight: bold;
+    font-size: x-large;
 }
 
 
