@@ -31,6 +31,7 @@ class App extends Component {
     };
 
     this.onLogin = function(user_email, token){
+      console.log(`Logging in ${user_email} with token ${token}`);
       this.setState(
         {logged_in: true, user_email: user_email, user_token: token}
       );

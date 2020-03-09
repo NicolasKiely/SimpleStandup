@@ -127,7 +127,10 @@ class RegisterForm extends Component {
     this.onChangeFName = this.onChangeFName.bind(this);
     this.onChangeLName = this.onChangeLName.bind(this);
 
-    this.state = {email: '', pass: '', fname: '', lname: '', error_msg: ''};
+    this.state = {
+      email: '', pass: '', fname: '', lname: '',
+      error_msg: '', redirect: false
+    };
   }
 
   onSubmit(e) {
@@ -145,6 +148,25 @@ class RegisterForm extends Component {
       res => {
         this.loginCallback(res.data.payload.email, res.data.payload.token);
         this.setState({error_msg: ''});
+        /* Try to login */
+        const login_url = get_backend_url('/api/1/auth/login');
+        const login_data = {
+          login_email: this.state.email,
+          login_pass: this.state.pass
+        };
+        axios.post(login_url, login_data).then(
+          res => {
+            if (res.data.payload.email){
+              this.loginCallback(res.data.payload.email, res.data.payload.token);
+              this.setState({error_msg: '', redirect: true});
+
+            } else {
+              console.log("Could not log in");
+              let error_msg = res.data.message || "Could not authenticate user";
+              this.setState({error_msg: error_msg});
+            }
+          }
+        );
       },
       err => {
         if (err.response) {
@@ -175,6 +197,10 @@ class RegisterForm extends Component {
   render() {
     const error_msg = '' + this.state.error_msg;
     const error_style = error_msg ? {} : {display: 'none'};
+    const redirect_el = this.state.redirect ?
+      <Redirect to="/" key="register_redirect" /> :
+      null
+    ;
 
     return (
       <div>
@@ -224,6 +250,7 @@ class RegisterForm extends Component {
             />
           </div>
         </form>
+        {redirect_el}
       </div>
     );
   }
