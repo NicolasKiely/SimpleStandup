@@ -20,6 +20,7 @@ function handle_internal_backend_error(http_results, err){
   let ext_status, message, error_message;
   if (err.response === undefined){
     console.error("Unexpected connection error with internal backend");
+    console.error(err);
     ext_status = 500;
     message = "Internal error";
     error_message = "internal_error";
