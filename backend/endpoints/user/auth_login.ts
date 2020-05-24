@@ -18,8 +18,9 @@ function auth_login(http_request, http_results) {
     user_pass: http_request.body.login_pass
   };
 
+  const internal_url = utils.get_internal_url("/auth/user/login");
   axios.post(
-    'http://localhost:8040/auth/user/login', int_request_data
+    internal_url, int_request_data
   ).then(
     res => {internal_login_callback(http_results, res);},
     err => {utils.handle_internal_backend_error(http_results, err);}
