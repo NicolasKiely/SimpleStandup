@@ -3,6 +3,7 @@ const BACKEND_SECRET = process.env['BACKEND_SECRET'] || '';
 
 /** Internal backend domain */
 const INTERNAL_BACKEND_DOMAIN = process.env["INTERNAL_BACKEND_DOMAIN"] || "http://localhost:8040";
+console.log("Using internal backend: " + INTERNAL_BACKEND_DOMAIN);
 
 
 /**
