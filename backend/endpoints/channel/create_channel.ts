@@ -11,6 +11,7 @@ import * as auth from "../../auth"
  * Entry point to create channel
  */
 function create_channel(http_request, http_results){
+  console.log("Attempting to create channel");
   const user_token = http_request.body.user_token;
   const user_email = http_request.body.user_email;
   const channel_name = http_request.body.channel_name;

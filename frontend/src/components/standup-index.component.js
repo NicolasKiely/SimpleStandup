@@ -37,12 +37,13 @@ export default class StandupIndex extends Component {
         channel_name: this.state.channel_name
       };
 
-      backend_request("/api/1/channel", props.global_handler, "PUT", send_data).then(
+      backend_request("/api/1/channels", props.global_handler, "PUT", send_data).then(
         () => {
           console.log("Created new channel!");
           this.setState({error_msg: "", display_new_channel_form: false});
         },
         err => {
+          console.log("Failed to create channel");
           const error_msg = err.response && err.response.data ?
             err.response.data.message: "Failed to create channel";
           this.setState({error_msg: error_msg});
