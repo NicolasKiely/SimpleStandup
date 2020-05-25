@@ -1,4 +1,5 @@
 import axios from 'axios';
+import * as utils from "./utils";
 
 const BACKEND_SECRET = process.env['BACKEND_SECRET'] || '';
 
@@ -14,8 +15,9 @@ function auth_register(request, results) {
     user_fname: request.body.register_fname,
     user_lname: request.body.register_lname
   };
+  const internal_url = utils.get_internal_url("/auth/user/register");
   axios.post(
-    'http://localhost:8040/auth/user/register', register_data
+    internal_url, register_data
   ).then(
     res => {
       let ext_message = res.data.message || 'Account successfully registered!';
