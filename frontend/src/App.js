@@ -65,7 +65,7 @@ class App extends Component {
   render() {
     let nav_bar = (
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
-        <Link to="/" className="navbar-brand">SimpleStandup</Link>
+        <Link to="/" className="navbar-brand">Standard Standup</Link>
         <div className="collapse navbar-collapse">
           <ul className="navbar-nav mr-auto">
             <li className="navbar-item">
