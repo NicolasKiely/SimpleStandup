@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {backend_request} from "../utils";
 
 /**
  * Channel tab for index
@@ -7,10 +8,13 @@ export default class ChannelIndexTab extends Component {
   constructor(props) {
     super(props);
 
+    this.channel_id = props.channel_id;
+
     this.state = {
       channel_name: props.channel_name,
       channel_owner: props.channel_owner,
       user_email: props.user_email,
+      user_token: props.user_token,
       expanded: false
     };
 
@@ -22,7 +26,25 @@ export default class ChannelIndexTab extends Component {
 
     /* Callback for archiving tab */
     this.onArchive = function(){
-      return true;
+      const channel_path = "/api/1/channels/" + this.channel_id;
+      console.log("Archiving channel " + this.channel_id);
+      const header = {
+        user_email: this.state.user_email, user_token: this.state.user_token,
+      };
+
+      backend_request(
+        channel_path, props.global_handler, "DELETE", undefined, header
+      ).then(
+        () => {
+          console.log("Archived channel!");
+        },
+        err => {
+          console.log("Failed to archive channel " + props.channel_id);
+          const error_msg = err.response && err.response.data ?
+            err.response.data.message: "Failed to archive channel";
+          this.setState({error_msg: error_msg});
+        }
+      );
     };
     this.onArchive = this.onArchive.bind(this);
   }
@@ -43,7 +65,7 @@ export default class ChannelIndexTab extends Component {
       /* Showing expanded details */
       const archiveBtn = (
         <div className="col-1 offset-10">
-          <button className="btn btn-outline-secondary btn-sm">
+          <button className="btn btn-outline-secondary btn-sm" onClick={this.onArchive}>
             Archive
           </button>
         </div>

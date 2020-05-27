@@ -9,6 +9,7 @@ import ChannelIndexTab from "./standup-channel-tab";
 export default class StandupIndex extends Component {
   constructor(props) {
     super(props);
+    this.global_handler = props.global_handler;
 
     this.state = {
       display_new_channel_form: false,
@@ -181,7 +182,9 @@ export default class StandupIndex extends Component {
       const channel_name = channel["channel_name"];
       const channel_owner = channel["owner"];
       const user_email = this.state["user_email"];
+      const user_token = this.state["user_token"];
       const archived = channel["archived"];
+      const channel_id = channel["channel_id"];
       if (this.state.filtering.subscribed){
         if (archived){continue;}
       } else if (this.state.filtering.my){
@@ -193,6 +196,8 @@ export default class StandupIndex extends Component {
       channel_divs.push(
         <ChannelIndexTab key={channel_name} channel_name={channel_name}
                          channel_owner={channel_owner} user_email={user_email}
+                         global_handler={this.global_handler} channel_id={channel_id}
+                         user_token={user_token}
         />
       );
     }
