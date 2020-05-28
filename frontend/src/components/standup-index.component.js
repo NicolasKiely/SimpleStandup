@@ -200,6 +200,7 @@ export default class StandupIndex extends Component {
                          channel_owner={channel_owner} user_email={user_email}
                          global_handler={this.global_handler} channel_id={channel_id}
                          user_token={user_token} update_list_callback={this.fetch_channels}
+                         archived={archived}
         />
       );
     }

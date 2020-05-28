@@ -12,6 +12,7 @@ export default class ChannelIndexTab extends Component {
     const update_list_callback = props.update_list_callback;
 
     this.state = {
+      archived: props.archived,
       channel_name: props.channel_name,
       channel_owner: props.channel_owner,
       user_email: props.user_email,
@@ -68,7 +69,7 @@ export default class ChannelIndexTab extends Component {
       const archiveBtn = (
         <div className="col-1 offset-10">
           <button className="btn btn-outline-secondary btn-sm" onClick={this.onArchive}>
-            Archive
+            {this.state.archived ? "Unarchive" : "Archive"}
           </button>
         </div>
       );
