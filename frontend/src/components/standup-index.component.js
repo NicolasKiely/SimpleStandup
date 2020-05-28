@@ -42,6 +42,7 @@ export default class StandupIndex extends Component {
         () => {
           console.log("Created new channel!");
           this.setState({error_msg: "", display_new_channel_form: false});
+          this.fetch_channels();
         },
         err => {
           console.log("Failed to create channel");

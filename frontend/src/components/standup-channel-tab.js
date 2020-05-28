@@ -37,6 +37,7 @@ export default class ChannelIndexTab extends Component {
       ).then(
         () => {
           console.log("Archived channel!");
+
         },
         err => {
           console.log("Failed to archive channel " + props.channel_id);
