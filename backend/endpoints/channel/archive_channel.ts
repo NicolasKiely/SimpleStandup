@@ -12,10 +12,11 @@ import axios from "axios";
 function archive_channel(http_request, http_results) {
   const user_token = http_request.headers["user_token"];
   const user_email = http_request.headers["user_email"];
-  console.log("Archiving channel ...");
+  const channel_id = http_request.params["channel_id"];
+  console.log("Archiving channel " + channel_id);
   auth.authenticate_user(user_email, user_token).then(
     user => {
-      auth_success(http_results, user_email);
+      auth_success(http_results, user_email, channel_id);
     },
     user => {
       auth_failed(http_results, user);
@@ -24,12 +25,16 @@ function archive_channel(http_request, http_results) {
 }
 
 
-function auth_success(http_results, user_email){
-  const request_data = {
+function auth_success(http_results, user_email, channel_id){
+  const header = {
     "X-USER-EMAIL": user_email,
     "X-BACKEND-SECRET": utils.BACKEND_SECRET
   };
-  axios({url: utils.get_internal_url("/channel/archive"), headers: request_data, method: "POST"}).then(
+  const data = {
+    "channel_id": channel_id
+  };
+  const url = utils.get_internal_url("/channel/archive");
+  axios({url: url, data: data, headers: header, method: "POST"}).then(
     res => {
       handle_internal_response(http_results, res);
     },
