@@ -79,6 +79,7 @@ export default class StandupIndex extends Component {
         }
       );
     };
+    this.fetch_channels = this.fetch_channels.bind(this);
     this.fetch_channels();
 
     /* Filter callbacks */
@@ -198,7 +199,7 @@ export default class StandupIndex extends Component {
         <ChannelIndexTab key={channel_name} channel_name={channel_name}
                          channel_owner={channel_owner} user_email={user_email}
                          global_handler={this.global_handler} channel_id={channel_id}
-                         user_token={user_token}
+                         user_token={user_token} update_list_callback={this.fetch_channels}
         />
       );
     }

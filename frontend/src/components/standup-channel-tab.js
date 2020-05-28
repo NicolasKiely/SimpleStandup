@@ -9,6 +9,7 @@ export default class ChannelIndexTab extends Component {
     super(props);
 
     this.channel_id = props.channel_id;
+    const update_list_callback = props.update_list_callback;
 
     this.state = {
       channel_name: props.channel_name,
@@ -37,7 +38,7 @@ export default class ChannelIndexTab extends Component {
       ).then(
         () => {
           console.log("Archived channel!");
-
+          update_list_callback();
         },
         err => {
           console.log("Failed to archive channel " + props.channel_id);
