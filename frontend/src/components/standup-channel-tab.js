@@ -10,6 +10,7 @@ export default class ChannelIndexTab extends Component {
 
     this.channel_id = props.channel_id;
     const update_list_callback = props.update_list_callback;
+    this.displayError = props.display_error;
 
     this.state = {
       archived: props.archived,
@@ -45,11 +46,35 @@ export default class ChannelIndexTab extends Component {
           console.log("Failed to archive channel " + props.channel_id);
           const error_msg = err.response && err.response.data ?
             err.response.data.message: "Failed to archive channel";
-          this.setState({error_msg: error_msg});
+          this.displayError(error_msg);
         }
       );
     };
     this.onArchive = this.onArchive.bind(this);
+
+    /* Callback for unarchiving tab */
+    this.onUnarchive = function(){
+      console.log("Unarchiving channel " + this.channel_id);
+      const send_data = {
+        user_email: this.state.user_email, user_token: this.state.user_token,
+        channel_name: this.state.channel_name
+      };
+
+      backend_request("/api/1/channels", props.global_handler, "PUT", send_data).then(
+        () => {
+          console.log("Unarchived channel!");
+          this.setState({error_msg: "", display_new_channel_form: false});
+          update_list_callback();
+        },
+        err => {
+          console.log("Failed to unarchive channel");
+          const error_msg = err.response && err.response.data ?
+            err.response.data.message: "Failed to unarchive channel";
+          this.displayError(error_msg);
+        }
+      );
+    };
+    this.onUnarchive = this.onUnarchive.bind(this);
   }
 
   render(){
@@ -68,7 +93,10 @@ export default class ChannelIndexTab extends Component {
       /* Showing expanded details */
       const archiveBtn = (
         <div className="col-1 offset-10">
-          <button className="btn btn-outline-secondary btn-sm" onClick={this.onArchive}>
+          <button
+            className="btn btn-outline-secondary btn-sm"
+            onClick={this.state.archived ? this.onUnarchive : this.onArchive}
+          >
             {this.state.archived ? "Unarchive" : "Archive"}
           </button>
         </div>

@@ -21,6 +21,12 @@ export default class StandupIndex extends Component {
       filtering: {"subscribed": true, "my": false, "archive": false}
     };
 
+    /* Displays error to user */
+    this.displayError = function(msg){
+      this.setState({error_msg: msg});
+    };
+    this.displayError = this.displayError.bind(this);
+
     /* Click handler for opening/closing form for new channel */
     this.onEditNewChannel = function(){
       this.setState(
@@ -48,7 +54,7 @@ export default class StandupIndex extends Component {
           console.log("Failed to create channel");
           const error_msg = err.response && err.response.data ?
             err.response.data.message: "Failed to create channel";
-          this.setState({error_msg: error_msg});
+          this.displayError(error_msg);
         }
       )
     };
@@ -75,7 +81,7 @@ export default class StandupIndex extends Component {
         err => {
           const error_msg = err.response && err.response.data ?
             err.response.data.message: "Failed to fetch list of channels";
-          this.setState({error_msg: error_msg});
+          this.displayError(error_msg);
         }
       );
     };
@@ -200,7 +206,7 @@ export default class StandupIndex extends Component {
                          channel_owner={channel_owner} user_email={user_email}
                          global_handler={this.global_handler} channel_id={channel_id}
                          user_token={user_token} update_list_callback={this.fetch_channels}
-                         archived={archived}
+                         archived={archived} display_error={this.displayError}
         />
       );
     }
