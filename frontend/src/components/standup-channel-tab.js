@@ -18,12 +18,13 @@ export default class ChannelIndexTab extends Component {
       channel_owner: props.channel_owner,
       user_email: props.user_email,
       user_token: props.user_token,
-      expanded: false
+      expanded: false,
+      active_form: ""
     };
 
     /* Callback for tab being clicked */
     this.onClick = function(){
-      this.setState({expanded: !this.state.expanded});
+      this.setState({expanded: !this.state.expanded, active_form: ""});
     };
     this.onClick = this.onClick.bind(this);
 
@@ -52,6 +53,32 @@ export default class ChannelIndexTab extends Component {
     };
     this.onArchive = this.onArchive.bind(this);
 
+    /** Handler for activating the user invite form */
+    this.onClickInvite = function(e){
+      if (this.state.active_form === "invite"){
+        console.log("Deactivating invite form");
+        this.setState({active_form: ""});
+
+      } else {
+        console.log("Activating invite form");
+        this.setState({active_form: "invite"});
+      }
+      e.stopPropagation();
+      console.log("State: " + this.state.active_form);
+    };
+    this.onClickInvite = this.onClickInvite.bind(this);
+
+    /** Handler for activating the post message form */
+    this.onClickMessage = function(e){
+      if (this.state.active_form === "message"){
+        this.setState({active_form: ""});
+      } else {
+        this.setState({active_form: "message"});
+      }
+      e.stopPropagation();
+    };
+    this.onClickMessage = this.onClickMessage.bind(this);
+
     /* Callback for unarchiving tab */
     this.onUnarchive = function(){
       console.log("Unarchiving channel " + this.channel_id);
@@ -75,6 +102,30 @@ export default class ChannelIndexTab extends Component {
       );
     };
     this.onUnarchive = this.onUnarchive.bind(this);
+
+    /** Renders form button */
+    this.formBtnDisplay = function(name, hdlr, text){
+      const active_form = this.state.active_form;
+      const btn_class = active_form !== "" ?
+        "btn btn-outline-secondary btn-sm" :
+        "btn btn-secondary btn-sm"
+      ;
+      if (active_form === name || active_form === ""){
+        return (
+          <div className="col-1">
+            <button
+              className={btn_class}
+              onClick={hdlr}
+            >
+              {active_form === name ? "Cancel" : text}
+            </button>
+          </div>
+        );
+      } else {
+        return <div className="col-1"> </div>;
+      }
+    };
+    this.formBtnDisplay = this.formBtnDisplay.bind(this);
   }
 
   render(){
@@ -92,7 +143,7 @@ export default class ChannelIndexTab extends Component {
     if (expanded){
       /* Showing expanded details */
       const archiveBtn = (
-        <div className="col-1 offset-10">
+        <div className="col-2 offset-8">
           <button
             className="btn btn-outline-secondary btn-sm"
             onClick={this.state.archived ? this.onUnarchive : this.onArchive}
@@ -101,11 +152,13 @@ export default class ChannelIndexTab extends Component {
           </button>
         </div>
       );
+      const inviteBtn = this.formBtnDisplay("invite", this.onClickInvite, "Invite");
+      const msgBtn = this.formBtnDisplay("message", this.onClickMessage, "Message");
       channelTabDetails = (
         <div className="row">
-          <div className="col-sm-12">
-            {archiveBtn}
-          </div>
+          {inviteBtn}
+          {msgBtn}
+          {archiveBtn}
         </div>
       );
     } else {
