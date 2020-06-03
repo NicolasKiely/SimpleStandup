@@ -68,6 +68,13 @@ export default class ChannelIndexTab extends Component {
     };
     this.onClickInvite = this.onClickInvite.bind(this);
 
+    this.onSubmitInvite = function(e){
+      e.stopPropagation();
+      console.log("Submit invite");
+      this.setState({active_form: ""});
+    };
+    this.onSubmitInvite = this.onSubmitInvite.bind(this);
+
     /** Handler for activating the post message form */
     this.onClickMessage = function(e){
       if (this.state.active_form === "message"){
@@ -139,7 +146,8 @@ export default class ChannelIndexTab extends Component {
       null :
       <span className="channel-tab-owner"> - {this.state.channel_owner}</span>
     ;
-    let channelTabDetails;
+    let channelTabDetails = null;
+    let channelTabForm = null;
     if (expanded){
       /* Showing expanded details */
       const archiveBtn = (
@@ -154,6 +162,28 @@ export default class ChannelIndexTab extends Component {
       );
       const inviteBtn = this.formBtnDisplay("invite", this.onClickInvite, "Invite");
       const msgBtn = this.formBtnDisplay("message", this.onClickMessage, "Message");
+
+      function interceptForm(e){e.stopPropagation();}
+
+      if (this.state.active_form === "invite"){
+        channelTabForm = (
+          <div className="channel-tab-form">
+            <form onSubmit={this.onSubmitInvite} className="form-horizontal" onClick={interceptForm}>
+              <div className="form-group row">
+                <label className="col-sm-2 control-label">User Email:</label>
+                <div className="col-sm-8">
+                  <input name="invite-email" type="text" className="form-control"
+                         onChange={this.onChangeChannelName}
+                  />
+                </div>
+                <div className="form-group col-sm-2">
+                  <button type="submit" className="btn btn-primary">Submit</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        );
+      }
       channelTabDetails = (
         <div className="row">
           {inviteBtn}
@@ -161,9 +191,6 @@ export default class ChannelIndexTab extends Component {
           {archiveBtn}
         </div>
       );
-    } else {
-      /* Tab is collapsed */
-      channelTabDetails = null;
     }
 
     return (
@@ -175,6 +202,7 @@ export default class ChannelIndexTab extends Component {
           </div>
         </div>
         {channelTabDetails}
+        {channelTabForm}
       </div>
     );
   }
