@@ -31,10 +31,32 @@ function auth_success(http_results, user_email, channel_id, invite_email){
     "X-BACKEND-SECRET": utils.BACKEND_SECRET
   };
 
+  const data = {
+    "invite_email": invite_email,
+    "channel_id": channel_id
+  };
   const url = utils.get_internal_url("/channel/invite");
-  http_results.status(500).json(
-    {"error": "NOT_IMPLEMENTED", "message": "Feature Not implemented"}
-    )
+  axios({url: url, data: data, headers: header, method: "POST"}).then(
+    res => {
+      handle_internal_response(http_results, res);
+    },
+    err => {
+      console.log(err.response.data);
+      utils.handle_internal_backend_error(http_results, err);
+    }
+  );
+}
+
+
+function handle_internal_response(http_results, int_results){
+  let ext_status = int_results.data.status || 500;
+
+  http_results.status(ext_status).json(
+    {
+      'payload': int_results.data.payload, 'error': int_results.data.error,
+      'message': int_results.data.message
+    }
+  );
 }
 
 
