@@ -10,7 +10,7 @@ export default class ChannelIndexTab extends Component {
 
     this.channel_id = props.channel_id;
     const update_list_callback = props.update_list_callback;
-    this.displayError = props.display_error;
+    this.displayError = props.log_error;
 
     this.state = {
       archived: props.archived,
@@ -19,7 +19,8 @@ export default class ChannelIndexTab extends Component {
       user_email: props.user_email,
       user_token: props.user_token,
       expanded: false,
-      active_form: ""
+      active_form: "",
+      invite_form: {email: ""},
     };
 
     /* Callback for tab being clicked */
@@ -68,10 +69,40 @@ export default class ChannelIndexTab extends Component {
     };
     this.onClickInvite = this.onClickInvite.bind(this);
 
+    this.onChangeInviteEmail = function(e){
+      this.setState({invite_form: {email: e.target.value}});
+    };
+    this.onChangeInviteEmail = this.onChangeInviteEmail.bind(this);
+
     this.onSubmitInvite = function(e){
       e.stopPropagation();
-      console.log("Submit invite");
-      this.setState({active_form: ""});
+      e.preventDefault();
+      const invite_email = this.state.invite_form.email;
+      console.log("Submit invite to " + invite_email);
+      const header = {
+        user_email: this.state.user_email,
+        user_token: this.state.user_token
+      };
+      const data = {
+        invite_email: invite_email
+      };
+      const url = "/api/1/channels/"+this.channel_id+"/invites";
+      backend_request(
+        url, props.global_handler, "PUT", data, header
+      ).then(
+        () => {
+          console.log("Successfully sent invite");
+          this.displayError();
+          this.setState({active_form: "", invite_form: {email: ""}});
+        },
+        err => {
+          console.log("Failed to send invite to user");
+          const def = "Failed to invite user " + invite_email;
+          const error_msg = err.response && err.response.data ?
+            err.response.data.message || def : def;
+          this.displayError(error_msg);
+        }
+      );
     };
     this.onSubmitInvite = this.onSubmitInvite.bind(this);
 
@@ -151,7 +182,7 @@ export default class ChannelIndexTab extends Component {
     if (expanded){
       /* Showing expanded details */
       const archiveBtn = (
-        <div className="col-2 offset-8">
+        <div className="col-2 offset-7">
           <button
             className="btn btn-outline-secondary btn-sm"
             onClick={this.state.archived ? this.onUnarchive : this.onArchive}
@@ -173,7 +204,7 @@ export default class ChannelIndexTab extends Component {
                 <label className="col-sm-2 control-label">User Email:</label>
                 <div className="col-sm-8">
                   <input name="invite-email" type="text" className="form-control"
-                         onChange={this.onChangeChannelName}
+                         onChange={this.onChangeInviteEmail}
                   />
                 </div>
                 <div className="form-group col-sm-2">

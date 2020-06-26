@@ -4,6 +4,7 @@ import * as auth_login from './endpoints/user/auth_login'
 import * as create_channel from './endpoints/channel/create_channel'
 import * as list_channels from './endpoints/channel/list_channels'
 import * as archive_channel from './endpoints/channel/archive_channel'
+import * as invite from './endpoints/channel/invite'
 
 const standupRoutes = express.Router();
 
@@ -12,5 +13,6 @@ standupRoutes.route('/auth/register').post(endpoints.auth_register);
 standupRoutes.route("/channels").put(create_channel.create_channel);
 standupRoutes.route("/channels").get(list_channels.list_channels);
 standupRoutes.route("/channels/:channel_id").delete(archive_channel.archive_channel);
+standupRoutes.route("/channels/:channel_id/invites").put(invite.invite_user);
 
 export {standupRoutes};
