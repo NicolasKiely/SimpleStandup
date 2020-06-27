@@ -16,16 +16,15 @@ class ChannelTabButton extends Component {
 
 
 /**
- * Archive button
+ * Button to archive/unarchive channel
  */
 class ArchiveButton extends ChannelTabButton {
   constructor(props){
     super(props);
 
-    /* Callback for archiving tab */
+    /* Callback for archiving/leaving channel */
     function onArchive(){
       const channelPath = "/api/1/channels/" + this.tab.channel_id;
-      console.log("Archiving channel " + this.tab.channel_id);
       const header = {
         user_email: this.tab.state.user_email, user_token: this.tab.state.user_token
       };
@@ -34,7 +33,6 @@ class ArchiveButton extends ChannelTabButton {
         channelPath, this.tab.global_handler, "DELETE", undefined, header
       ).then(
         () => {
-          console.log("Archived channel!");
           this.tab.update_list_callback();
         },
         err => {
@@ -46,9 +44,8 @@ class ArchiveButton extends ChannelTabButton {
       );
     }
 
-    /* Callback for unarchiving tab */
+    /* Callback for unarchiving channel */
     function onUnarchive(){
-      console.log("Unarchiving channel " + this.tab.channel_id);
       const sendData = {
         user_email: this.tab.state.user_email, user_token: this.tab.state.user_token,
         channel_name: this.tab.state.channel_name
@@ -57,7 +54,6 @@ class ArchiveButton extends ChannelTabButton {
         "/api/1/channels", this.tab.global_handler, "PUT", sendData
       ).then(
         () => {
-          console.log("Unarchiving channel");
           this.tab.setState({error_msg: "", display_new_channel_form: false});
           this.tab.update_list_callback();
         },
@@ -76,13 +72,19 @@ class ArchiveButton extends ChannelTabButton {
   }
 
   render(){
+    let text;
+    if (this.tab.isOwner){
+      text = this.tab.state.archived ? "Unarchive" : "Archive";
+    } else {
+      text = "Leave";
+    }
     return (
       <div className="col-2 offset-7">
         <button
           className="btn btn-outline-secondary btn-sm"
           onClick={this.onClick}
         >
-          {this.tab.state.archived ? "Unarchive" : "Archive"}
+          {text}
         </button>
       </div>
     );
@@ -101,6 +103,9 @@ export default class ChannelIndexTab extends Component {
     this.update_list_callback = props.update_list_callback;
     this.displayError = props.log_error;
     this.global_handler = props.global_handler;
+    this.isOwner = (
+      props.channel_owner.toLowerCase() === props.user_email.toLowerCase()
+    );
 
     this.state = {
       archived: props.archived,
@@ -208,13 +213,12 @@ export default class ChannelIndexTab extends Component {
   }
 
   render(){
-    const isOwner = this.state.channel_owner === this.state.user_email;
     const expanded = this.state.expanded;
     const wrapperClass = expanded ?
       "channel-tab-wrapper channel-tab-wrapper-expanded" :
       "channel-tab-wrapper channel-tab-wrapper-collapsed"
     ;
-    const channelOwnerSpan = isOwner ?
+    const channelOwnerSpan = this.isOwner ?
       null :
       <span className="channel-tab-owner"> - {this.state.channel_owner}</span>
     ;
