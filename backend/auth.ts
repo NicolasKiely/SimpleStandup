@@ -60,4 +60,32 @@ function user_token_expired(user_model){
   return false;
 }
 
-export {authenticate_user, user_token_expired};
+
+/**
+ * Default callback in the case that authentication failed
+ * @param http_results results object
+ * @param user User model
+ */
+function failed_auth_handler(http_results, user){
+  if (user === undefined){
+    console.log("No user");
+    http_results.status(401).json(
+      {"payload": {}, "error": "INVALID_AUTH", "message": "Failed to authenticate user"}
+    );
+
+  } else if (user_token_expired(user)){
+    console.log("User token expired");
+    http_results.status(401).json(
+      {"payload": {}, "error": "TOKEN_EXPIRED", "message": "Please log in"}
+    );
+
+  } else {
+    console.log("Failed to authenticate user");
+    http_results.status(401).json(
+      {"payload": {}, "error": "INVALID_AUTH", "message": "Failed to authenticate user"}
+    );
+  }
+}
+
+
+export {authenticate_user, user_token_expired, failed_auth_handler};

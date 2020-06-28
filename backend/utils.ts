@@ -33,4 +33,24 @@ function handle_internal_backend_error(http_results, err){
   );
 }
 
-export {BACKEND_SECRET, INTERNAL_BACKEND_DOMAIN, get_internal_url, handle_internal_backend_error};
+
+/** Generic handler for internal response */
+function handle_internal_response(http_results, int_results){
+  let ext_status = int_results.data.status || 500;
+
+  http_results.status(ext_status).json(
+    {
+      'payload': int_results.data.payload, 'error': int_results.data.error,
+      'message': int_results.data.message
+    }
+  );
+}
+
+
+export {
+  BACKEND_SECRET,
+  INTERNAL_BACKEND_DOMAIN,
+  get_internal_url,
+  handle_internal_backend_error,
+  handle_internal_response
+};
