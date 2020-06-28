@@ -6,6 +6,7 @@ import "./static/channel-list.css";
 
 import StandupIndex from "./components/standup-index.component";
 import LoginRegisterForm from "./components/standup-login.component";
+import {backend_request} from "./utils";
 
 class App extends Component {
   constructor() {
@@ -60,6 +61,45 @@ class App extends Component {
       }
     };
     this.global_handler = this.global_handler.bind(this);
+
+    /**
+     * Notification fetcher
+     */
+    this.notificationHandler = function(timeout){
+      let nextTimeout = timeout || 4000;
+      nextTimeout = Math.min(nextTimeout, 16000);
+      nextTimeout = Math.max(nextTimeout, 2000);
+      if (!this.state.logged_in){
+        setTimeout(this.notificationHandler, nextTimeout*2);
+        return;
+      }
+      const header = {
+        user_email: this.state.user_email,
+        user_token: this.state.user_token
+      };
+      backend_request(
+        "/api/1/notifications/unread", this.global_handler, "GET",
+        undefined, header
+      ).then(
+        (response) => {
+          const notes = response.data.payload;
+          if (notes.length){
+            setTimeout(this.notificationHandler, nextTimeout/2);
+          } else {
+            setTimeout(this.notificationHandler, nextTimeout*2);
+          }
+        },
+        err => {
+          console.log("Failed to get notifications");
+          const errorMsg = err.response && err.response.data ?
+            err.response.data.message: "Failed to fetch notifications";
+          console.log(errorMsg);
+          setTimeout(this.notificationHandler, nextTimeout * 2);
+        }
+      );
+    };
+    this.notificationHandler = this.notificationHandler.bind(this);
+    this.notificationHandler();
   }
 
   render() {
@@ -67,16 +107,26 @@ class App extends Component {
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
         <Link to="/" className="navbar-brand">Standard Standup</Link>
         <div className="collapse navbar-collapse">
-          <ul className="navbar-nav mr-auto">
+          <ul className="navbar-nav mr-auto mt-2 mt-lg-0">
             <li className="navbar-item">
               <Link to="/" className="nav-link btn btn-link">Index</Link>
             </li>
+            <li className="navbar-item">
+              <button type="button"
+                      className="nav-link btn btn-link"
+              >
+                Notifications
+              </button>
+            </li>
+          </ul>
+          <ul className="navbar-nav">
             <li className="navbar-item">
               <button type="button" href="#"
                       className="nav-link btn btn-link" onClick={this.onLogout}
               >
                 Logout
               </button>
+
             </li>
           </ul>
         </div>

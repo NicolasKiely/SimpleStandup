@@ -124,8 +124,6 @@ export default class StandupIndex extends Component {
       };
       backend_request("/api/1/channels", props.global_handler, "GET", undefined, header).then(
         (response) => {
-          console.log("Got results:");
-          console.log(response.data.payload);
           this.setState({"channels": response.data.payload});
         },
         err => {
