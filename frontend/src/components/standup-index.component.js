@@ -6,16 +6,105 @@ import {backend_request} from "../utils";
 import ChannelIndexTab from "./standup-channel-tab";
 
 
+class CreateChannelForm extends Component {
+  constructor(props){
+    super(props);
+    this.index = props.index;
+    this.globalHandler = props.globalHandler;
+
+    this.state = {
+      displayNewChannelForm: false,
+      channelName: ""
+    };
+
+    /* Click handler for opening/closing form for new channel */
+    this.onEditNewChannel = function(){
+      this.setState(
+        {displayNewChannelForm: !this.state.displayNewChannelForm}
+      );
+    };
+    this.onEditNewChannel = this.onEditNewChannel.bind(this);
+
+    /* Channel name field handler */
+    this.onChangeChannelName = function(e){
+      this.setState({channelName: e.target.value});
+    };
+    this.onChangeChannelName = this.onChangeChannelName.bind(this);
+
+    /* Handler for submiting request to create new channel */
+    this.onCreateNewChannel = function(e){
+      e.preventDefault();
+      console.log("Creating new channel...");
+      const send_data = {
+        user_email: this.index.state.user_email, user_token: this.index.state.user_token,
+        channel_name: this.state.channelName
+      };
+
+      backend_request("/api/1/channels", this.global_handler, "PUT", send_data).then(
+        () => {
+          console.log("Created new channel!");
+          this.index.setState({error_msg: ""});
+          this.setState({displayNewChannelForm: false, channelName: ""});
+          this.index.fetch_channels();
+        },
+        err => {
+          console.log("Failed to create channel");
+          const error_msg = err.response && err.response.data ?
+            err.response.data.message: "Failed to create channel";
+          this.index.displayError(error_msg);
+        }
+      )
+    };
+    this.onCreateNewChannel = this.onCreateNewChannel.bind(this);
+  }
+
+  render(){
+    const displayNewChannelFormClass = this.state.displayNewChannelForm ?
+      "channel-list-form" : "channel-list-form-hidden";
+    const newChannelButtonText = this.state.displayNewChannelForm ?
+      "Cancel" : "Create New Channel";
+    const newChannelButtonClass = this.state.displayNewChannelForm ?
+      "btn btn-block btn-outline-secondary" : "btn btn-block btn-secondary";
+
+    return (
+      <div className="channel-list-form-padded-container">
+        <button
+          type="button" className={newChannelButtonClass}
+          onClick={this.onEditNewChannel}
+        >
+          {newChannelButtonText}
+        </button>
+
+        <div className={displayNewChannelFormClass}>
+          <form onSubmit={this.onCreateNewChannel} className="form-horizontal">
+            <div className="form-group row">
+              <label className="col-sm-2 control-label">Channel Name:</label>
+              <div className="col-sm-8">
+                <input name="channel-name" type="text" className="form-control"
+                       onChange={this.onChangeChannelName}
+                />
+              </div>
+
+              <div className="form-group col-sm-2">
+                <button type="submit" className="btn btn-primary">Submit</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    );
+  }
+}
+
+
 export default class StandupIndex extends Component {
   constructor(props) {
     super(props);
     this.global_handler = props.global_handler;
 
     this.state = {
-      display_new_channel_form: false,
       user_email: props.user_email,
       user_token: props.user_token,
-      channel_name: "",
       error_msg: "",
       channels: [],
       filtering: {"subscribed": true, "my": false, "archive": false}
@@ -26,45 +115,6 @@ export default class StandupIndex extends Component {
       this.setState({error_msg: msg});
     };
     this.displayError = this.displayError.bind(this);
-
-    /* Click handler for opening/closing form for new channel */
-    this.onEditNewChannel = function(){
-      this.setState(
-        {display_new_channel_form: !this.state.display_new_channel_form}
-      );
-    };
-    this.onEditNewChannel = this.onEditNewChannel.bind(this);
-
-    /* Handler for submiting request to create new channel */
-    this.onCreateNewChannel = function(e){
-      e.preventDefault();
-      console.log("Creating new channel...");
-      const send_data = {
-        user_email: this.state.user_email, user_token: this.state.user_token,
-        channel_name: this.state.channel_name
-      };
-
-      backend_request("/api/1/channels", props.global_handler, "PUT", send_data).then(
-        () => {
-          console.log("Created new channel!");
-          this.setState({error_msg: "", display_new_channel_form: false});
-          this.fetch_channels();
-        },
-        err => {
-          console.log("Failed to create channel");
-          const error_msg = err.response && err.response.data ?
-            err.response.data.message: "Failed to create channel";
-          this.displayError(error_msg);
-        }
-      )
-    };
-    this.onCreateNewChannel = this.onCreateNewChannel.bind(this);
-
-    /* Channel name field handler */
-    this.onChangeChannelName = function(e){
-      this.setState({channel_name: e.target.value});
-    };
-    this.onChangeChannelName = this.onChangeChannelName.bind(this);
 
     /* Fetch existing channels for user */
     this.fetch_channels = function(){
@@ -117,12 +167,6 @@ export default class StandupIndex extends Component {
   }
 
   render() {
-    const display_new_channel_form_class = this.state.display_new_channel_form ?
-      "channel-list-form" : "channel-list-form-hidden";
-    const new_channel_button_text = this.state.display_new_channel_form ?
-      "Cancel" : "Create New Channel";
-    const new_channel_button_class = this.state.display_new_channel_form ?
-      "btn btn-block btn-outline-secondary" : "btn btn-block btn-secondary";
     const error_msg = this.state.error_msg;
 
     const subscribedFilterDivClass = (
@@ -211,30 +255,6 @@ export default class StandupIndex extends Component {
       );
     }
 
-    /* Form elements for creating new channel */
-    const new_channel_form = <div>
-      <button type="button" className={new_channel_button_class} onClick={this.onEditNewChannel}>
-        {new_channel_button_text}
-      </button>
-
-      <div className={display_new_channel_form_class}>
-        <form onSubmit={this.onCreateNewChannel} className="form-horizontal">
-          <div className="form-group row">
-            <label className="col-sm-2 control-label">Channel Name:</label>
-            <div className="col-sm-8">
-              <input name="channel-name" type="text" className="form-control"
-                     onChange={this.onChangeChannelName}
-              />
-            </div>
-
-            <div className="form-group col-sm-2">
-              <button type="submit" className="btn btn-primary">Submit</button>
-            </div>
-          </div>
-        </form>
-      </div>
-    </div>;
-
     return (
       <div style={{marginTop: 10}}>
         <div className="channel-list-form-container">
@@ -244,9 +264,7 @@ export default class StandupIndex extends Component {
           </div>
 
           {channel_divs}
-          <div className="channel-list-form-padded-container">
-            {new_channel_form}
-          </div>
+          <CreateChannelForm index={this}/>
         </div>
       </div>
     );
