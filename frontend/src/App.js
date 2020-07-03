@@ -14,9 +14,15 @@ class AppNavbar extends Component {
   constructor(props) {
     super(props);
     this.app = props.app;
+
+    this.state = {
+      "notifications": []
+    };
+
     this.notificationHandler = function(notifications){
       console.log("Notifications:");
       console.log(notifications);
+      this.setState({"notifications": notifications});
     };
     this.notificationHandler = this.notificationHandler.bind(this);
 
@@ -24,44 +30,24 @@ class AppNavbar extends Component {
   }
 
   render(){
-    /*
-    const nav = <nav className="navbar navbar-expand-lg navbar-light bg-light">
-      <Link to="/" className="navbar-brand">Standard Standup</Link>
-      <div className="collapse navbar-collapse">
-        <ul className="navbar-nav mr-auto mt-2 mt-lg-0">
-          <li className="navbar-item">
-            <Link to="/" className="nav-link btn btn-link">Index</Link>
-          </li>
-          <li className="navbar-item dropdown">
-            <button type="button dropdown-toggle"
-                    className="nav-link btn btn-link dropdown-toggle"
-                    data-toggle="dropdown"
-            >
-              Notifications
-            </button>
-          </li>
-        </ul>
-        <ul className="navbar-nav">
-          <li className="navbar-item">
-            <button type="button"
-                    className="nav-link btn btn-link" onClick={this.app.onLogout}
-            >
-              Logout
-            </button>
+    const notifications = this.state.notifications.map(
+      (note) => <NavDropdown.Item key={note["id"]}>{note["title"]}</NavDropdown.Item>
+    );
+    const noteTitle = notifications.length > 0 ?
+      String.fromCharCode(9733) + " Notifications" :
+      String.fromCharCode(9734) + " Notifications"
+    ;
 
-          </li>
-        </ul>
-      </div>
-    </nav>;
-    */
     return <Navbar bg="light" expang="lg">
       <Navbar.Brand href="/">Standard Standup</Navbar.Brand>
       <Nav className="mr-auto">
         <Nav.Link href="/">Index</Nav.Link>
-        <NavDropdown title="Notifications">
-          <NavDropdown.Item>Item 1</NavDropdown.Item>
-          <NavDropdown.Item>Item 2</NavDropdown.Item>
-        </NavDropdown>
+        {this.app.state.logged_in ?
+          <NavDropdown title={noteTitle}>
+            {notifications}
+          </NavDropdown> :
+          undefined
+        }
       </Nav>
       <button type="button" className="nav-link btn btn-link" onClick={this.app.onLogout}>
         Logout
@@ -109,6 +95,8 @@ class App extends Component {
       this.setState(
         {logged_in: false, user_email: undefined, user_token: undefined}
       );
+      /* Clear notifications */
+      this.updateNotificationCallers([], "");
     };
     this.onLogout = this.onLogout.bind(this);
 
@@ -147,19 +135,12 @@ class App extends Component {
         (response) => {
           const noteData = response.data.payload;
           const notes = noteData["notifications"];
-          const noteHash = noteData["hash"];
           if (notes.length){
             setTimeout(this.notificationHandler, nextTimeout/2);
           } else {
             setTimeout(this.notificationHandler, nextTimeout*2);
           }
-          /* Determing if notifications has changed since last request */
-          if (this.oldNotificationHash !== noteHash) {
-            for (const caller of this.notificationCallers) {
-              caller(notes);
-            }
-          }
-          this.oldNotificationHash = noteHash;
+          this.updateNotificationCallers(notes, noteData["hash"]);
         },
         err => {
           console.log("Failed to get notifications");
@@ -179,6 +160,17 @@ class App extends Component {
     };
     this.registerNotificationCallback = this.registerNotificationCallback.bind(this);
     this.notificationCallers = [];
+
+    /* Determing if notifications has changed since last request */
+    this.updateNotificationCallers = function(notes, noteHash){
+      if (this.oldNotificationHash !== noteHash) {
+        for (const caller of this.notificationCallers) {
+          caller(notes);
+        }
+      }
+      this.oldNotificationHash = noteHash;
+    }
+    this.updateNotificationCallers = this.updateNotificationCallers.bind(this);
   }
 
   render() {
