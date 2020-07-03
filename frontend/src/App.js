@@ -1,64 +1,19 @@
 import React, {Component} from 'react';
 import {BrowserRouter as Router, Route, Redirect} from "react-router-dom";
-import {Navbar, NavDropdown, Nav} from 'react-bootstrap';
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./static/login.css";
 import "./static/channel-list.css";
 
 import StandupIndex from "./components/standup-index.component";
 import LoginRegisterForm from "./components/standup-login.component";
+import AppNavbar from "./components/standup-nav.component";
+import ToastNotification from "./components/notification-form.component";
 import {backend_request} from "./utils";
 
 
-class AppNavbar extends Component {
-  constructor(props) {
-    super(props);
-    this.app = props.app;
-
-    this.state = {
-      "notifications": []
-    };
-
-    this.notificationHandler = function(notifications){
-      console.log("Notifications:");
-      console.log(notifications);
-      this.setState({"notifications": notifications});
-    };
-    this.notificationHandler = this.notificationHandler.bind(this);
-
-    this.app.registerNotificationCallback(this.notificationHandler);
-  }
-
-  render(){
-    const notifications = this.state.notifications.map(
-      (note) => <NavDropdown.Item key={note["id"]}>{note["title"]}</NavDropdown.Item>
-    );
-    const noteTitle = notifications.length > 0 ?
-      String.fromCharCode(9733) + " Notifications" :
-      String.fromCharCode(9734) + " Notifications"
-    ;
-
-    return <Navbar bg="light" expang="lg">
-      <Navbar.Brand href="/">Standard Standup</Navbar.Brand>
-      <Nav className="mr-auto">
-        <Nav.Link href="/">Index</Nav.Link>
-        {this.app.state.logged_in ?
-          <NavDropdown title={noteTitle}>
-            {notifications}
-          </NavDropdown> :
-          undefined
-        }
-      </Nav>
-      <button type="button" className="nav-link btn btn-link" onClick={this.app.onLogout}>
-        Logout
-      </button>
-    </Navbar>;
-  }
-}
-
 class App extends Component {
   constructor() {
-    super();
+    super(undefined);
 
     let first_token = localStorage.getItem("login_token");
     let first_logged_in;
@@ -76,8 +31,10 @@ class App extends Component {
       logged_in: first_logged_in,
       user_email: first_email,
       user_token: first_token,
-      prefer_login: false
+      prefer_login: false,
+      activeNotificationID: undefined
     };
+    this.notifications = {};
 
     this.onLogin = function(user_email, token){
       console.log(`Logging in ${user_email} with token ${token}`);
@@ -160,6 +117,15 @@ class App extends Component {
     };
     this.registerNotificationCallback = this.registerNotificationCallback.bind(this);
     this.notificationCallers = [];
+    this.globalNotificationCallback = function(notes){
+      this.notifications = {};
+      for (const note of notes){
+        this.notifications[note["id"]] = note;
+      }
+    };
+    this.globalNotificationCallback = this.globalNotificationCallback.bind(this);
+    this.registerNotificationCallback(this.globalNotificationCallback);
+
 
     /* Determing if notifications has changed since last request */
     this.updateNotificationCallers = function(notes, noteHash){
@@ -169,8 +135,13 @@ class App extends Component {
         }
       }
       this.oldNotificationHash = noteHash;
-    }
+    };
     this.updateNotificationCallers = this.updateNotificationCallers.bind(this);
+
+    this.activateNotification = function(noteNum){
+      this.setState({activeNotificationID: noteNum});
+    };
+    this.activateNotification = this.activateNotification.bind(this);
   }
 
   render() {
@@ -196,8 +167,23 @@ class App extends Component {
       routes.push(<Redirect to="/login" key="login-redirect"/>);
     }
 
+    const activeNotification = this.state.activeNotificationID !== undefined ?
+      this.notifications[this.state.activeNotificationID] :
+      undefined
+    ;
+    const notificationDisplay = activeNotification !== undefined ?
+      <ToastNotification app={this} notification={activeNotification}/> : undefined
+    ;
+
     let body = (
       <div className="container-fluid">
+        <div className="row">
+          <div className="col-sm-12 col-md-10 col-lg-10 offset-md-1 offset-lg-1">
+            <div className="d-flex justify-content-center align-items-center">
+              {notificationDisplay}
+            </div>
+          </div>
+        </div>
         <div className="row">
           <div className="col-sm-12 col-md-10 col-lg-10 offset-md-1 offset-lg-1">
             {routes}

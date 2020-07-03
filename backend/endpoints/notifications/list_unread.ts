@@ -10,8 +10,6 @@ function listUnread(http_request, http_results){
   const user_token = http_request.headers["user_token"];
   const user_email = http_request.headers["user_email"];
 
-  console.log("Fetching unread notifications for " + user_email);
-
   auth.authenticate_user(user_email, user_token).then(
     () => {
       auth_success(http_results, user_email);
