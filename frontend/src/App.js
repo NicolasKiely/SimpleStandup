@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import {BrowserRouter as Router, Route, Link, Redirect} from "react-router-dom";
+import {BrowserRouter as Router, Route, Redirect} from "react-router-dom";
+import {Navbar, NavDropdown, Nav} from 'react-bootstrap';
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./static/login.css";
 import "./static/channel-list.css";
@@ -7,6 +8,67 @@ import "./static/channel-list.css";
 import StandupIndex from "./components/standup-index.component";
 import LoginRegisterForm from "./components/standup-login.component";
 import {backend_request} from "./utils";
+
+
+class AppNavbar extends Component {
+  constructor(props) {
+    super(props);
+    this.app = props.app;
+    this.notificationHandler = function(notifications){
+      console.log("Notifications:");
+      console.log(notifications);
+    };
+    this.notificationHandler = this.notificationHandler.bind(this);
+
+    this.app.registerNotificationCallback(this.notificationHandler);
+  }
+
+  render(){
+    /*
+    const nav = <nav className="navbar navbar-expand-lg navbar-light bg-light">
+      <Link to="/" className="navbar-brand">Standard Standup</Link>
+      <div className="collapse navbar-collapse">
+        <ul className="navbar-nav mr-auto mt-2 mt-lg-0">
+          <li className="navbar-item">
+            <Link to="/" className="nav-link btn btn-link">Index</Link>
+          </li>
+          <li className="navbar-item dropdown">
+            <button type="button dropdown-toggle"
+                    className="nav-link btn btn-link dropdown-toggle"
+                    data-toggle="dropdown"
+            >
+              Notifications
+            </button>
+          </li>
+        </ul>
+        <ul className="navbar-nav">
+          <li className="navbar-item">
+            <button type="button"
+                    className="nav-link btn btn-link" onClick={this.app.onLogout}
+            >
+              Logout
+            </button>
+
+          </li>
+        </ul>
+      </div>
+    </nav>;
+    */
+    return <Navbar bg="light" expang="lg">
+      <Navbar.Brand href="/">Standard Standup</Navbar.Brand>
+      <Nav className="mr-auto">
+        <Nav.Link href="/">Index</Nav.Link>
+        <NavDropdown title="Notifications">
+          <NavDropdown.Item>Item 1</NavDropdown.Item>
+          <NavDropdown.Item>Item 2</NavDropdown.Item>
+        </NavDropdown>
+      </Nav>
+      <button type="button" className="nav-link btn btn-link" onClick={this.app.onLogout}>
+        Logout
+      </button>
+    </Navbar>;
+  }
+}
 
 class App extends Component {
   constructor() {
@@ -62,6 +124,7 @@ class App extends Component {
     };
     this.global_handler = this.global_handler.bind(this);
 
+    this.oldNotificationHash = "";
     /**
      * Notification fetcher
      */
@@ -82,12 +145,21 @@ class App extends Component {
         undefined, header
       ).then(
         (response) => {
-          const notes = response.data.payload;
+          const noteData = response.data.payload;
+          const notes = noteData["notifications"];
+          const noteHash = noteData["hash"];
           if (notes.length){
             setTimeout(this.notificationHandler, nextTimeout/2);
           } else {
             setTimeout(this.notificationHandler, nextTimeout*2);
           }
+          /* Determing if notifications has changed since last request */
+          if (this.oldNotificationHash !== noteHash) {
+            for (const caller of this.notificationCallers) {
+              caller(notes);
+            }
+          }
+          this.oldNotificationHash = noteHash;
         },
         err => {
           console.log("Failed to get notifications");
@@ -100,38 +172,17 @@ class App extends Component {
     };
     this.notificationHandler = this.notificationHandler.bind(this);
     this.notificationHandler();
+
+
+    this.registerNotificationCallback = function(callback){
+      this.notificationCallers.push(callback);
+    };
+    this.registerNotificationCallback = this.registerNotificationCallback.bind(this);
+    this.notificationCallers = [];
   }
 
   render() {
-    let nav_bar = (
-      <nav className="navbar navbar-expand-lg navbar-light bg-light">
-        <Link to="/" className="navbar-brand">Standard Standup</Link>
-        <div className="collapse navbar-collapse">
-          <ul className="navbar-nav mr-auto mt-2 mt-lg-0">
-            <li className="navbar-item">
-              <Link to="/" className="nav-link btn btn-link">Index</Link>
-            </li>
-            <li className="navbar-item">
-              <button type="button"
-                      className="nav-link btn btn-link"
-              >
-                Notifications
-              </button>
-            </li>
-          </ul>
-          <ul className="navbar-nav">
-            <li className="navbar-item">
-              <button type="button" href="#"
-                      className="nav-link btn btn-link" onClick={this.onLogout}
-              >
-                Logout
-              </button>
-
-            </li>
-          </ul>
-        </div>
-      </nav>
-    );
+    let nav_bar = <AppNavbar app={this} />;
 
     let routes = [
       <Route path="/login" key="/login">
