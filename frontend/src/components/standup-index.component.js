@@ -3,7 +3,7 @@
  */
 import React, {Component} from 'react';
 import {backend_request} from "../utils";
-import ChannelIndexTab from "./standup-channel-tab";
+import ChannelIndexTab from "./channel-tab/channel-tab";
 
 
 class CreateChannelForm extends Component {
