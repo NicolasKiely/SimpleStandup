@@ -34,7 +34,7 @@ class ToastNotification extends Component {
         const data = dataFunc();
         const url = "/api/1/notifications/" + pk;
         backend_request(url, this.app.global_handler, "PATCH", data, header).then(
-          () => {console.log("Notification dismissed")},
+          () => {console.log("Notification dismissed"); this.app.channelUpdater();},
           err => {console.log(err)}
         );
       };
@@ -53,8 +53,8 @@ class ToastNotification extends Component {
       // Setup invite form
       inviteForm = (
         <div className="float-right">
-          {this.buttonify("Accept", () => {return {dismissed: true, invite: "accepted"}})} |
-          {this.buttonify("Decline", () => {return {dismissed: true, invite: "declined"}})}
+          {this.buttonify("Accept", () => {return {dismissed: true, invite: "accept"}})} |
+          {this.buttonify("Decline", () => {return {dismissed: true, invite: "decline"}})}
         </div>
       );
     } else {

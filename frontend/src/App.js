@@ -35,6 +35,7 @@ class App extends Component {
       activeNotificationID: undefined
     };
     this.notifications = {};
+    this.channelUpdater = function(){console.log("No channel updater")};
 
     this.onLogin = function(user_email, token){
       console.log(`Logging in ${user_email} with token ${token}`);
@@ -142,6 +143,11 @@ class App extends Component {
       this.setState({activeNotificationID: noteNum});
     };
     this.activateNotification = this.activateNotification.bind(this);
+
+    this.setChannelUpdater = function(callback){
+      this.channelUpdater = callback;
+    };
+    this.setChannelUpdater = this.setChannelUpdater.bind(this);
   }
 
   render() {
@@ -159,7 +165,7 @@ class App extends Component {
       </Route>,
       <Route path="/" exact key="/">
         <StandupIndex user_email={this.state.user_email} user_token={this.state.user_token}
-                      global_handler={this.global_handler}
+                      global_handler={this.global_handler} app={this}
         />
       </Route>
     ];

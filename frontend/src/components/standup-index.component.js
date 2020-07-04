@@ -101,6 +101,7 @@ export default class StandupIndex extends Component {
   constructor(props) {
     super(props);
     this.global_handler = props.global_handler;
+    this.app = props.app;
 
     this.state = {
       user_email: props.user_email,
@@ -135,6 +136,7 @@ export default class StandupIndex extends Component {
     };
     this.fetch_channels = this.fetch_channels.bind(this);
     this.fetch_channels();
+    this.app.setChannelUpdater(this.fetch_channels);
 
     /* Filter callbacks */
     this.onFilterSubscribed = function(){
