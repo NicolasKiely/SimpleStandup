@@ -192,27 +192,30 @@ export default class StandupIndex extends Component {
     );
 
     /* Top tabs to filter channels */
-    const filtering_tabs = (
-      <div className="channel-list-filter-wrapper">
-        <div className="row no-gutters">
-          <div className="col-4">
-            <div className={subscribedFilterDivClass} onClick={this.onFilterSubscribed}>
-              <span className="channel-list-filter-header">Subscribed</span>
+    const filtering_tabs = this.state.channels.length ?
+      (
+        <div className="channel-list-filter-wrapper">
+          <div className="row no-gutters">
+            <div className="col-4">
+              <div className={subscribedFilterDivClass} onClick={this.onFilterSubscribed}>
+                <span className="channel-list-filter-header">Subscribed</span>
+              </div>
             </div>
-          </div>
-          <div className="col-4">
-            <div className={myFilterDivClass} onClick={this.onFilterMy}>
-              <span className="channel-list-filter-header">My Channels</span>
+            <div className="col-4">
+              <div className={myFilterDivClass} onClick={this.onFilterMy}>
+                <span className="channel-list-filter-header">My Channels</span>
+              </div>
             </div>
-          </div>
-          <div className="col-4">
-            <div className={archiveFilterDivClass} onClick={this.onFilterArchive}>
-              <span className="channel-list-filter-header">Archived</span>
+            <div className="col-4">
+              <div className={archiveFilterDivClass} onClick={this.onFilterArchive}>
+                <span className="channel-list-filter-header">Archived</span>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    );
+      ) :
+      undefined
+    ;
 
     /* Show error alert if there is an error */
     let error_div = <div/>;
