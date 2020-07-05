@@ -102,6 +102,31 @@ class MessageForm extends Component{
       e.stopPropagation();
       e.preventDefault();
 
+      const header = {
+        user_email: this.tab.state.user_email,
+        user_token: this.tab.state.user_token
+      };
+      const data = {
+        dt_posted: this.state.date,
+        message: this.state.message
+      };
+      const url = "/api/1/channels/"+this.tab.channel_id+"/messages";
+      backend_request(
+        url, this.tab.global_handler, "POST", data, header
+      ).then(
+        () => {
+          this.tab.displayError();
+          this.tab.setState({active_form: ""});
+        },
+        err => {
+          console.log("Failed to post message to channel");
+          const def = "Failed to post message to channel " + this.tab.state.channel_name;
+          const error_msg = err.response && err.response.data ?
+            err.response.data.message || def : def;
+          this.tab.displayError(error_msg);
+        }
+      );
+
       console.log("Posting message: " + this.state.date + " - " + this.state.message);
     };
     this.onSubmit = this.onSubmit.bind(this);
@@ -123,7 +148,7 @@ class MessageForm extends Component{
             <label className="col-sm-2 control-label">Message:</label>
             <div className="col-sm-8">
               <textarea name="message-text" className="form-control" cols="3"
-                        onChange={this.onChangeMessage}
+                        onChange={this.onChangeMessage} required="required"
               />
             </div>
 
