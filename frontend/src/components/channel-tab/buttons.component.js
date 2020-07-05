@@ -79,7 +79,7 @@ class ArchiveButton extends ChannelTabButton {
       text = "Leave";
     }
     return (
-      <div className="col-2 offset-7">
+      <div className="col-2">
         <button
           className="btn btn-outline-secondary btn-sm"
           onClick={this.onClick}

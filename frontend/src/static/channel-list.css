@@ -65,7 +65,17 @@ div.channel-list-filter-active span {
 
 span.channel-list-filter-header {
     font-weight: bold;
-    font-size: x-large;
+    font-size: small;
+}
+@media (min-width: 544px){
+   span.channel-list-filter-header {
+       font-size: medium;
+   }
+}
+@media (min-width: 768px){
+    span.channel-list-filter-header {
+        font-size: x-large;
+    }
 }
 
 

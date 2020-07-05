@@ -37,11 +37,8 @@ export default class ChannelIndexTab extends Component {
     /** Handler for activating the user invite form */
     this.onClickInvite = function(e){
       if (this.state.active_form === "invite"){
-        console.log("Deactivating invite form");
         this.setState({active_form: ""});
-
       } else {
-        console.log("Activating invite form");
         this.setState({active_form: "invite"});
       }
       e.stopPropagation();
@@ -69,14 +66,12 @@ export default class ChannelIndexTab extends Component {
       ;
       if (active_form === name || active_form === ""){
         return (
-          <div className="col-1">
             <button
-              className={btn_class}
+              className={btn_class + " ml-2"}
               onClick={hdlr}
             >
               {active_form === name ? "Cancel" : text}
             </button>
-          </div>
         );
       } else {
         return <div className="col-1"> </div>;
@@ -105,6 +100,7 @@ export default class ChannelIndexTab extends Component {
         undefined
       ;
       const msgBtn = this.formBtnDisplay("message", this.onClickMessage, "Message");
+      const histBtn = this.formBtnDisplay("history", undefined, "History");
 
       if (this.state.active_form === "invite"){
         channelTabForm = <InviteForm tab={this} />;
@@ -113,8 +109,11 @@ export default class ChannelIndexTab extends Component {
       }
       channelTabDetails = (
         <div className="row">
-          {inviteBtn}
-          {msgBtn}
+          <div className="col-8 mr-auto">
+            {histBtn}
+            {inviteBtn}
+            {msgBtn}
+          </div>
           {archiveBtn}
         </div>
       );
