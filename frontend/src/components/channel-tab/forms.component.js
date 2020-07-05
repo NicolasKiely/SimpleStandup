@@ -74,4 +74,49 @@ class InviteForm extends Component {
 }
 
 
-export {InviteForm};
+/**
+ * Tab form for messaing channel
+ */
+class MessageForm extends Component{
+  constructor(props) {
+    super(props);
+    this.tab = props.tab;
+
+
+    this.onSubmit = function(){
+
+    };
+    this.onSubmit = this.onSubmit.bind(this);
+  }
+
+  render(){
+    const today = new Date().toISOString().substr(0, 10);
+    return (
+      <div className="channel-tab-form">
+        <form onSubmit={this.onSubmit} className="form-horizontal" onClick={interceptForm}>
+          <div className="form-group row">
+            <label className="col-sm-2 control-label">Date:</label>
+            <div className="col-sm-4">
+              <input name="message-date" type="date" className="form-control"
+                     defaultValue={today}
+              />
+            </div>
+          </div>
+          <div className="form-group row">
+            <label className="col-sm-2 control-label">Message:</label>
+            <div className="col-sm-8">
+              <textarea name="message-text" className="form-control" cols="3" />
+            </div>
+
+            <div className="form-group col-sm-2">
+              <button type="submit" className="btn btn-primary">Submit</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    );
+  }
+}
+
+
+export {InviteForm, MessageForm};

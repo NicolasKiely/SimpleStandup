@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {ArchiveButton} from "./buttons.component";
-import {InviteForm} from "./forms.component";
+import {InviteForm, MessageForm} from "./forms.component";
 
 
 /**
@@ -105,18 +105,14 @@ export default class ChannelIndexTab extends Component {
 
       if (this.state.active_form === "invite"){
         channelTabForm = <InviteForm tab={this} />;
+      } else if (this.state.active_form === "message") {
+        channelTabForm = <MessageForm tab={this} />;
       }
       channelTabDetails = (
         <div className="row">
           {inviteBtn}
           {msgBtn}
           {archiveBtn}
-        </div>
-      );
-    } else if (this.state.active_form === "message"){
-      channelTabForm = (
-        <div className="channel-tab-form">
-
         </div>
       );
     }
