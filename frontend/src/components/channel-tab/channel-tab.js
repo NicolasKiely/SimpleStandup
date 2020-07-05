@@ -17,6 +17,7 @@ export default class ChannelIndexTab extends Component {
     this.isOwner = (
       props.channel_owner.toLowerCase() === props.user_email.toLowerCase()
     );
+    this.setActiveChannel = props.setActiveChannel;
 
     this.state = {
       archived: props.archived,
@@ -24,8 +25,9 @@ export default class ChannelIndexTab extends Component {
       channel_owner: props.channel_owner,
       user_email: props.user_email,
       user_token: props.user_token,
-      expanded: false,
+      expanded: props.isActive,
       active_form: "",
+      isActive: props.isActive
     };
 
     /* Callback for tab being clicked */
@@ -56,6 +58,12 @@ export default class ChannelIndexTab extends Component {
       e.stopPropagation();
     };
     this.onClickMessage = this.onClickMessage.bind(this);
+
+    this.onClickHistory = function(e){
+      this.setActiveChannel(this.channel_id);
+      e.stopPropagation();
+    };
+    this.onClickHistory = this.onClickHistory.bind(this);
 
     /** Renders form button */
     this.formBtnDisplay = function(name, hdlr, text){
@@ -100,7 +108,10 @@ export default class ChannelIndexTab extends Component {
         undefined
       ;
       const msgBtn = this.formBtnDisplay("message", this.onClickMessage, "Message");
-      const histBtn = this.formBtnDisplay("history", undefined, "History");
+      const histBtn = this.state.isActive ?
+        undefined :
+        this.formBtnDisplay("history", this.onClickHistory, "History")
+      ;
 
       if (this.state.active_form === "invite"){
         channelTabForm = <InviteForm tab={this} />;

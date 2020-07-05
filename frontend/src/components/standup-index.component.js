@@ -4,6 +4,7 @@
 import React, {Component} from 'react';
 import {backend_request} from "../utils";
 import ChannelIndexTab from "./channel-tab/channel-tab";
+import ChannelPanel from "./channel-panel.component";
 
 
 class CreateChannelForm extends Component {
@@ -108,7 +109,8 @@ export default class StandupIndex extends Component {
       user_token: props.user_token,
       error_msg: "",
       channels: [],
-      filtering: {"subscribed": true, "my": false, "archive": false}
+      filtering: {"subscribed": true, "my": false, "archive": false},
+      activeChannel: undefined
     };
 
     /* Displays error to user */
@@ -164,10 +166,16 @@ export default class StandupIndex extends Component {
       this.setState({filtering: filtering});
     };
     this.onFilterArchive = this.onFilterArchive.bind(this);
+
+    this.setActiveChannel = function(channel_id){
+      this.setState({activeChannel: channel_id});
+    };
+    this.setActiveChannel = this.setActiveChannel.bind(this);
   }
 
   render() {
     const error_msg = this.state.error_msg;
+    const isChannelActive = this.state.activeChannel !== undefined;
 
     const subscribedFilterDivClass = (
       "channel-list-filter-left channel-list-filter " + (
@@ -192,7 +200,7 @@ export default class StandupIndex extends Component {
     );
 
     /* Top tabs to filter channels */
-    const filtering_tabs = this.state.channels.length ?
+    const filtering_tabs = this.state.channels.length && !isChannelActive ?
       (
         <div className="channel-list-filter-wrapper">
           <div className="row no-gutters">
@@ -240,6 +248,7 @@ export default class StandupIndex extends Component {
       const user_token = this.state["user_token"];
       const archived = channel["archived"];
       const channel_id = channel["channel_id"];
+      let isActive = false;
       if (this.state.filtering.subscribed){
         if (archived){continue;}
       } else if (this.state.filtering.my){
@@ -248,15 +257,34 @@ export default class StandupIndex extends Component {
       } else {
         if (!archived){continue;}
       }
+      if (this.state.activeChannel !== undefined){
+        if (this.state.activeChannel !== channel_id){
+          continue
+        } else {
+          isActive = true;
+          console.log(isActive);
+        }
+      }
       channel_divs.push(
-        <ChannelIndexTab key={channel_name} channel_name={channel_name}
+        <ChannelIndexTab key={channel_name+"-"+isActive} channel_name={channel_name}
                          channel_owner={channel_owner} user_email={user_email}
                          global_handler={this.global_handler} channel_id={channel_id}
                          user_token={user_token} update_list_callback={this.fetch_channels}
                          archived={archived} log_error={this.displayError}
+                         setActiveChannel={this.setActiveChannel}
+                         isActive={isActive}
         />
       );
     }
+    const returnBtn = isChannelActive ?
+      (
+        <button className="btn btn-secondary btn-block"
+                onClick={() => this.setActiveChannel()}
+        >
+          &larr; Go Back
+        </button>
+      ): undefined
+    ;
 
     return (
       <div style={{marginTop: 10}}>
@@ -267,7 +295,8 @@ export default class StandupIndex extends Component {
           </div>
 
           {channel_divs}
-          <CreateChannelForm index={this}/>
+          {isChannelActive ? undefined : <CreateChannelForm index={this}/>}
+          {returnBtn}
         </div>
       </div>
     );
