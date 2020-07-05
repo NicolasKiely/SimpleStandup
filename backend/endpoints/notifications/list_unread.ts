@@ -32,7 +32,6 @@ function auth_success(http_results, user_email){
       utils.handle_internal_response(http_results, res);
     },
     err => {
-      console.log(err.response.data);
       utils.handle_internal_backend_error(http_results, err);
     }
   );

@@ -100,7 +100,10 @@ export default class ChannelIndexTab extends Component {
     if (expanded){
       /* Showing expanded details */
       const archiveBtn = <ArchiveButton tab={this} />;
-      const inviteBtn = this.formBtnDisplay("invite", this.onClickInvite, "Invite");
+      const inviteBtn = this.isOwner ?
+        this.formBtnDisplay("invite", this.onClickInvite, "Invite") :
+        undefined
+      ;
       const msgBtn = this.formBtnDisplay("message", this.onClickMessage, "Message");
 
       if (this.state.active_form === "invite"){
