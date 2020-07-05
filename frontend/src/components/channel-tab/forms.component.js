@@ -81,16 +81,33 @@ class MessageForm extends Component{
   constructor(props) {
     super(props);
     this.tab = props.tab;
+    this.today = new Date().toISOString().substr(0, 10);
 
+    this.state = {
+      date: this.today,
+      message: ""
+    };
 
-    this.onSubmit = function(){
+    this.onChangeDate = function(e){
+      this.setState({date: e.target.value});
+    };
+    this.onChangeDate = this.onChangeDate.bind(this);
 
+    this.onChangeMessage = function(e){
+      this.setState({message: e.target.value});
+    };
+    this.onChangeMessage = this.onChangeMessage.bind(this);
+
+    this.onSubmit = function(e){
+      e.stopPropagation();
+      e.preventDefault();
+
+      console.log("Posting message: " + this.state.date + " - " + this.state.message);
     };
     this.onSubmit = this.onSubmit.bind(this);
   }
 
   render(){
-    const today = new Date().toISOString().substr(0, 10);
     return (
       <div className="channel-tab-form">
         <form onSubmit={this.onSubmit} className="form-horizontal" onClick={interceptForm}>
@@ -98,14 +115,16 @@ class MessageForm extends Component{
             <label className="col-sm-2 control-label">Date:</label>
             <div className="col-sm-4">
               <input name="message-date" type="date" className="form-control"
-                     defaultValue={today}
+                     defaultValue={this.today} onChange={this.onChangeDate}
               />
             </div>
           </div>
           <div className="form-group row">
             <label className="col-sm-2 control-label">Message:</label>
             <div className="col-sm-8">
-              <textarea name="message-text" className="form-control" cols="3" />
+              <textarea name="message-text" className="form-control" cols="3"
+                        onChange={this.onChangeMessage}
+              />
             </div>
 
             <div className="form-group col-sm-2">
