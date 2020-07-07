@@ -32,7 +32,12 @@ export default class ChannelIndexTab extends Component {
 
     /* Callback for tab being clicked */
     this.onClick = function(){
-      this.setState({expanded: this.state.isActive || !this.state.expanded, active_form: ""});
+      this.setState(
+        {
+          expanded: this.state.isActive || !this.state.expanded,
+          active_form: ""
+        }
+      );
     };
     this.onClick = this.onClick.bind(this);
 

@@ -1,0 +1,20 @@
+/**
+ * Stylesheet for channel panel
+ */
+
+div.channel-panel-form-container {
+    border: #F8F8F8 solid 2px;
+    border-radius: 8px;
+    border-collapse: collapse;
+    box-sizing: border-box;
+    min-width: 160px;
+    background-color: #FDFDFD;
+    margin: 15px 2px 2px;
+}
+
+div.channel-panel-form-header {
+    background-color: #DBDBDB;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    min-height: 35px;
+}

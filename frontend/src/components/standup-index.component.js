@@ -262,7 +262,6 @@ export default class StandupIndex extends Component {
           continue
         } else {
           isActive = true;
-          console.log(isActive);
         }
       }
       channel_divs.push(

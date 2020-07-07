@@ -3,6 +3,7 @@ import {BrowserRouter as Router, Route, Redirect} from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./static/login.css";
 import "./static/channel-list.css";
+import "./static/channel-panel.css";
 
 import StandupIndex from "./components/standup-index.component";
 import LoginRegisterForm from "./components/standup-login.component";
