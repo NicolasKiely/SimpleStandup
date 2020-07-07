@@ -298,6 +298,8 @@ export default class StandupIndex extends Component {
           {isChannelActive ? undefined : <CreateChannelForm index={this}/>}
           {returnBtn}
         </div>
+
+        {isChannelActive ? <ChannelPanel index={this}/> : undefined}
       </div>
     );
   }
