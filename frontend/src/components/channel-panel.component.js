@@ -12,7 +12,9 @@ class LogTab extends Component{
   }
 
   render(){
-    return <div>{this.logData.date}: Log Tab</div>
+    return <div className="channel-log-tab-wrapper">
+      {this.logData.date}: Log Tab
+    </div>
   }
 }
 
@@ -20,9 +22,15 @@ class LogTab extends Component{
 export default class ChannelPanel extends Component {
   constructor(props){
     super(props);
+    const dtEnd = new Date();
+    const dtStart = new Date();
+    dtStart.setDate(dtEnd - 7);
+
     this.state = {
+      dtStart: dtStart,
+      dtEnd: dtEnd,
       logs: [
-        {date: 0}, {date: 1}, {date: 2}, {date: 3}, {date: 4}, {date: 5}, {date: 6}
+        {date: 0}, {date: 1}, {date: 2}, {date: 3}, {date: 4}, {date: 5}, {date: dtEnd.toDateString()}
       ]
     };
     this.app = props.app;
@@ -39,9 +47,8 @@ export default class ChannelPanel extends Component {
     return (
       <div className="channel-panel-form-container">
         <div className="channel-panel-form-header">
-          Logs Header
+          <span>Channel Logs</span>
         </div>
-        Logs Body
         {dateDivs}
       </div>
     );

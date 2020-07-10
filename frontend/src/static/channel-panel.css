@@ -17,4 +17,20 @@ div.channel-panel-form-header {
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
     min-height: 35px;
+    padding-top: 2px;
+}
+
+div.channel-panel-form-header span {
+    padding-left: 15px;
+    font-weight: bold;
+    font-size: large;
+}
+
+
+/* Log tab styling */
+div.channel-log-tab-wrapper {
+    border-bottom: #E0E0E0 solid 1px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 15px;
 }

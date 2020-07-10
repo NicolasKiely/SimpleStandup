@@ -45,4 +45,21 @@ function backend_request(path, event_handler, method, send_data, header){
 }
 
 
-export {get_backend_url, backend_request};
+/**
+ * Converts date object to ISO date string
+ * @param dt {Date} Date object
+ * @returns {string} ISO date
+ */
+function dateToISO(dt){
+  const yy = dt.getFullYear();
+  const m = dt.getMonth();
+  const d = dt.getDate();
+
+  const mm = m < 10 ? "0" + m : m;
+  const dd = d < 10 ? "0" + d : d;
+
+  return `${yy}-${mm}-${dd}`;
+}
+
+
+export {get_backend_url, backend_request, dateToISO};
