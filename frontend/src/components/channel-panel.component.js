@@ -2,6 +2,7 @@
  * Panel for channel chat history
  */
 import React, {Component} from 'react';
+import {backend_request, dateToISO} from "../utils";
 
 
 class LogTab extends Component{
@@ -24,7 +25,7 @@ export default class ChannelPanel extends Component {
     super(props);
     const dtEnd = new Date();
     const dtStart = new Date();
-    dtStart.setDate(dtEnd - 7);
+    dtStart.setDate(dtEnd.getDate() - 7);
 
     this.state = {
       dtStart: dtStart,
@@ -34,6 +35,33 @@ export default class ChannelPanel extends Component {
       ]
     };
     this.app = props.app;
+    this.index = props.index;
+    this.channelID = this.index.state.activeChannel;
+
+    /* Fetches logs from backend */
+    this.fetchLogs = function(){
+      const header = {
+        user_email: this.state.user_email,
+        user_token: this.state.user_token
+      };
+      const isoStart = dateToISO(this.state.dtStart);
+      const isoEnd = dateToISO(this.state.dtEnd);
+      const url = `/api/1/channels/${this.channelID}/logs/${isoStart}/${isoEnd}`;
+      backend_request(url, this.index.global_handler, "GET", undefined, header).then(
+        (response) => {
+          console.log(response.data.payload);
+        },
+        err => {
+          const error_msg = err.response && err.response.data ?
+            err.response.data.message: "Failed to fetch list of daily logs";
+          this.index.displayError(error_msg);
+          console.log(error_msg);
+        }
+      );
+
+    };
+    this.fetchLogs = this.fetchLogs.bind(this);
+    this.fetchLogs();
   }
 
   render(){
