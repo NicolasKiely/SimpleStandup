@@ -35,6 +35,18 @@ div.channel-log-tab-wrapper {
     padding-bottom: 15px;
 }
 
+div.channel-log-tab-wrapper-expanded {
+    background-color: #FDFDFD;
+}
+
+div.channel-log-tab-wrapper-collapsed {
+    background-color: #F6F6F6;
+}
+
+div.channel-log-tab-wrapper-collapsed:hover {
+    background-color: #FAFAFA;
+}
+
 span.channel-log-tab-date {
     font-size: small;
     font-family: monospace;

@@ -42,8 +42,6 @@ function auth_success(httpResults, userEmail, channelID, dtStart, dtEnd) {
       utils.handle_internal_backend_error(httpResults, err);
     }
   );
-
-  console.log(`Getting logs for ${channelID} from ${dtStart} to ${dtEnd}`);
 }
 
 

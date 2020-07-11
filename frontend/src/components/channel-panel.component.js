@@ -11,19 +11,32 @@ class LogTab extends Component{
     super(props);
     this.panel = props.panel;
     this.logData = props.data;
+
+    this.state = {
+      expanded: false
+    };
+
+    /* Invert expanded state on click */
+    this.onClick = function(){
+      this.setState({expanded: !this.state.expanded});
+    };
+    this.onClick = this.onClick.bind(this);
   }
 
   render(){
+    const wrapperClass = this.state.expanded ?
+      "channel-log-tab-wrapper channel-log-tab-wrapper-expanded" :
+      "channel-log-tab-wrapper channel-log-tab-wrapper-collapsed"
+    ;
     const userPills = [];
     for (const m of this.logData.messages){
-      console.log(m);
       userPills.push(
-        <Badge variant="secondary" key={m.user.email} className="channel-log-tab-user-badge">
+        <Badge variant="secondary" key={m.user.email} className="channel-log-tab-user-badge" title={m.user.email}>
           {m.user["first_name"]} {m.user["last_name"]}
         </Badge>
       );
     }
-    return <div className="channel-log-tab-wrapper">
+    return <div className={wrapperClass} onClick={this.onClick}>
       <span className="channel-log-tab-date">{this.logData.date}</span>
       {userPills}
     </div>
@@ -60,7 +73,6 @@ export default class ChannelPanel extends Component {
       const url = `/api/1/channels/${this.channelID}/logs/${isoStart}/${isoEnd}`;
       backend_request(url, this.index.global_handler, "GET", undefined, header).then(
         (response) => {
-          console.log(response.data.payload);
           this.setState({logs: response.data.payload.logs});
         },
         err => {
