@@ -6,6 +6,7 @@ import * as list_channels from './endpoints/channel/list_channels'
 import * as archive_channel from './endpoints/channel/archive_channel'
 import * as invite from './endpoints/channel/invite'
 import * as message_channel from "./endpoints/channel/message"
+import * as list_logs from './endpoints/channel/list_logs'
 import * as list_unread from './endpoints/notifications/list_unread'
 import * as update_notification from './endpoints/notifications/response'
 
@@ -25,6 +26,8 @@ standupRoutes.route("/channels/:channel_id/invites")
   .put(invite.invite_user);
 standupRoutes.route("/channels/:channel_id/messages")
   .post(message_channel.messageChannel);
+standupRoutes.route("/channels/:channel_id/logs/:dt_start/:dt_end")
+  .get(list_logs.listLogs);
 standupRoutes.route("/notifications/unread")
   .get(list_unread.listUnread);
 standupRoutes.route("/notifications/:note_id")
