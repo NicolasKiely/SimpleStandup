@@ -2,6 +2,7 @@
  * Panel for channel chat history
  */
 import React, {Component} from 'react';
+import {Badge} from 'react-bootstrap';
 import {backend_request, dateToISO} from "../utils";
 
 
@@ -13,8 +14,18 @@ class LogTab extends Component{
   }
 
   render(){
+    const userPills = [];
+    for (const m of this.logData.messages){
+      console.log(m);
+      userPills.push(
+        <Badge variant="secondary" key={m.user.email} className="channel-log-tab-user-badge">
+          {m.user["first_name"]} {m.user["last_name"]}
+        </Badge>
+      );
+    }
     return <div className="channel-log-tab-wrapper">
-      {this.logData.date}: Log Tab
+      <span className="channel-log-tab-date">{this.logData.date}</span>
+      {userPills}
     </div>
   }
 }

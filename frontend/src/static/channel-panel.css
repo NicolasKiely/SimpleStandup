@@ -34,3 +34,13 @@ div.channel-log-tab-wrapper {
     padding-right: 10px;
     padding-bottom: 15px;
 }
+
+span.channel-log-tab-date {
+    font-size: small;
+    font-family: monospace;
+    color: #002040;
+}
+
+.channel-log-tab-user-badge {
+    margin-left: 5px;
+}
