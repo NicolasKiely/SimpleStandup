@@ -25,14 +25,14 @@ export default class ChannelPanel extends Component {
     super(props);
     const dtEnd = new Date();
     const dtStart = new Date();
-    dtStart.setDate(dtEnd.getDate() - 7);
+    const initDate = dtEnd.getDate();
+    dtStart.setDate(initDate - 7);
+    dtEnd.setDate(initDate + 1);
 
     this.state = {
       dtStart: dtStart,
       dtEnd: dtEnd,
-      logs: [
-        {date: 0}, {date: 1}, {date: 2}, {date: 3}, {date: 4}, {date: 5}, {date: dtEnd.toDateString()}
-      ]
+      logs: []
     };
     this.app = props.app;
     this.index = props.index;
@@ -41,8 +41,8 @@ export default class ChannelPanel extends Component {
     /* Fetches logs from backend */
     this.fetchLogs = function(){
       const header = {
-        user_email: this.state.user_email,
-        user_token: this.state.user_token
+        user_email: this.index.state.user_email,
+        user_token: this.index.state.user_token
       };
       const isoStart = dateToISO(this.state.dtStart);
       const isoEnd = dateToISO(this.state.dtEnd);
@@ -50,6 +50,7 @@ export default class ChannelPanel extends Component {
       backend_request(url, this.index.global_handler, "GET", undefined, header).then(
         (response) => {
           console.log(response.data.payload);
+          this.setState({logs: response.data.payload.logs});
         },
         err => {
           const error_msg = err.response && err.response.data ?

@@ -51,9 +51,9 @@ function backend_request(path, event_handler, method, send_data, header){
  * @returns {string} ISO date
  */
 function dateToISO(dt){
-  const yy = dt.getFullYear();
-  const m = dt.getMonth();
-  const d = dt.getDate();
+  const yy = dt.getUTCFullYear();
+  const m = dt.getUTCMonth() + 1;
+  const d = dt.getUTCDate();
 
   const mm = m < 10 ? "0" + m : m;
   const dd = d < 10 ? "0" + d : d;
