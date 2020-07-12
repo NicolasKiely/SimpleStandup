@@ -1,5 +1,6 @@
 import {backend_request} from "../../utils";
 import React, {Component} from "react";
+import ReactGA from 'react-ga';
 
 
 /**
@@ -34,6 +35,7 @@ class ArchiveButton extends ChannelTabButton {
       ).then(
         () => {
           this.tab.update_list_callback();
+          ReactGA.event({category: "User", action: "Archive Channel"});
         },
         err => {
           console.log("Failed to archive channel " + this.tab.channel_id);
@@ -56,6 +58,7 @@ class ArchiveButton extends ChannelTabButton {
         () => {
           this.tab.setState({error_msg: "", display_new_channel_form: false});
           this.tab.update_list_callback();
+          ReactGA.event({category: "User", action: "Unarchive Channel"});
         },
         err => {
           console.log("Failed to unarchive channel");

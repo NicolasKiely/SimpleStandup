@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import ReactGA from 'react-ga';
 import {ArchiveButton} from "./buttons.component";
 import {InviteForm, MessageForm} from "./forms.component";
 
@@ -66,6 +67,7 @@ export default class ChannelIndexTab extends Component {
 
     this.onClickHistory = function(e){
       this.setActiveChannel(this.channel_id);
+      ReactGA.event({category: "User", action: "Open Channel Panel"});
       e.stopPropagation();
     };
     this.onClickHistory = this.onClickHistory.bind(this);
@@ -125,7 +127,7 @@ export default class ChannelIndexTab extends Component {
       }
       channelTabDetails = (
         <div className="row">
-          <div className="col-8 mr-auto">
+          <div className="col-lg-10 col-md-8 col-sm-6 mr-auto">
             {histBtn}
             {inviteBtn}
             {msgBtn}

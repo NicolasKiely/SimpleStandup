@@ -2,6 +2,7 @@
  * Top level index components
  */
 import React, {Component} from 'react';
+import ReactGA from 'react-ga';
 import {backend_request} from "../utils";
 import ChannelIndexTab from "./channel-tab/channel-tab";
 import ChannelPanel from "./channel-panel.component";
@@ -47,6 +48,7 @@ class CreateChannelForm extends Component {
           this.index.setState({error_msg: ""});
           this.setState({displayNewChannelForm: false, channelName: ""});
           this.index.fetch_channels();
+          ReactGA.event({category: "User", action: "Create Channel"});
         },
         err => {
           console.log("Failed to create channel");

@@ -1,4 +1,5 @@
 import React, {Component} from "react";
+import ReactGA from 'react-ga';
 import {backend_request} from "../../utils";
 
 
@@ -33,6 +34,7 @@ class InviteForm extends Component {
           this.tab.displayError();
           this.setState({invite_form: {email: ""}});
           this.tab.setState({active_form: ""});
+          ReactGA.event({category: "User", action: "Send Channel Invite"});
         },
         err => {
           console.log("Failed to send invite to user");
@@ -117,6 +119,7 @@ class MessageForm extends Component{
         () => {
           this.tab.displayError();
           this.tab.setState({active_form: ""});
+          ReactGA.event({category: "User", action: "Send Channel Message"});
         },
         err => {
           console.log("Failed to post message to channel");
