@@ -36,7 +36,10 @@ class AppNavbar extends Component {
     return <Navbar bg="light" expang="lg">
       <Navbar.Brand href="/">Standard Standup</Navbar.Brand>
       <Nav className="mr-auto">
-        <Nav.Link href="/settings">Settings</Nav.Link>
+        {this.app.state.logged_in ?
+          <Nav.Link href="/settings">Settings</Nav.Link> :
+          undefined
+        }
         {this.app.state.logged_in ?
           <NavDropdown title={noteTitle}>
             {notifications}
