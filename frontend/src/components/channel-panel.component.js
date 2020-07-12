@@ -65,6 +65,36 @@ class ChannelPanelHeader extends Component {
   constructor(props) {
     super(props);
     this.panel = props.panel;
+
+    this.changeStart = function(e){
+      const newStart = new Date(e.target.value);
+      let newEnd = this.panel.state.dtEnd;
+      const dtDiff = (newEnd - newStart) / (1000*60*60*24);
+      if (dtDiff > 31){
+        newEnd = new Date(dateToISO(newStart));
+        newEnd.setDate(newStart.getDate() + 31);
+      } else if (dtDiff < 0){
+        newEnd = new Date(dateToISO(newStart));
+      }
+
+      this.panel.fetchLogs(newStart, newEnd);
+    };
+    this.changeStart = this.changeStart.bind(this);
+
+    this.changeEnd = function(e){
+      let newStart = this.panel.state.dtStart;
+      const newEnd = new Date(e.target.value);
+      const dtDiff = (newEnd - newStart) / (1000*60*60*24);
+      if (dtDiff > 31){
+        newStart = new Date(dateToISO(newEnd));
+        newStart.setDate(newStart.getDate() - 31);
+      } else if (dtDiff < 0){
+        newStart = new Date(dateToISO(newEnd));
+      }
+
+      this.panel.fetchLogs(newStart, newEnd);
+    };
+    this.changeEnd = this.changeEnd.bind(this);
   }
 
   render(){
@@ -78,8 +108,8 @@ class ChannelPanelHeader extends Component {
               <InputGroup.Prepend>
                 <InputGroup.Text>Date Range:</InputGroup.Text>
               </InputGroup.Prepend>
-              <FormControl type="date" defaultValue={dtStart}/>
-              <FormControl type="date" defaultValue={dtEnd}/>
+              <FormControl type="date" value={dtStart} onChange={this.changeStart}/>
+              <FormControl type="date" value={dtEnd} onChange={this.changeEnd}/>
             </InputGroup>
           </div>
         </div>
@@ -107,17 +137,19 @@ export default class ChannelPanel extends Component {
     this.channelID = this.index.state.activeChannel;
 
     /* Fetches logs from backend */
-    this.fetchLogs = function(){
+    this.fetchLogs = function(newStart, newEnd){
+      newStart = newStart === undefined ? this.state.dtStart : newStart;
+      newEnd = newEnd === undefined ? this.state.dtEnd : newEnd;
       const header = {
         user_email: this.index.state.user_email,
         user_token: this.index.state.user_token
       };
-      const isoStart = dateToISO(this.state.dtStart);
-      const isoEnd = dateToISO(this.state.dtEnd);
+      const isoStart = dateToISO(newStart);
+      const isoEnd = dateToISO(newEnd);
       const url = `/api/1/channels/${this.channelID}/logs/${isoStart}/${isoEnd}`;
       backend_request(url, this.index.global_handler, "GET", undefined, header).then(
         (response) => {
-          this.setState({logs: response.data.payload.logs});
+          this.setState({logs: response.data.payload.logs, dtStart: newStart, dtEnd: newEnd});
         },
         err => {
           const error_msg = err.response && err.response.data ?
