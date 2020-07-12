@@ -29,7 +29,7 @@ function getSettingsAuthSuccess(httpResults, userEmail){
     "X-USER-EMAIL": userEmail,
     "X-BACKEND-SECRET": utils.BACKEND_SECRET
   };
-  const url = utils.get_internal_url("/user/settings/list");
+  const url = utils.get_internal_url("/auth/user/settings/get");
   axios({url: url, headers: header, method: "GET"}).then(
     res => {
       utils.handle_internal_response(httpResults, res);
