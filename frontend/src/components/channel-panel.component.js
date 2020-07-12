@@ -2,8 +2,8 @@
  * Panel for channel chat history
  */
 import React, {Component} from 'react';
-import {Badge, ListGroup} from 'react-bootstrap';
-import {backend_request, dateToISO} from "../utils";
+import {Badge, ListGroup, InputGroup, FormControl} from 'react-bootstrap';
+import {backend_request, currentDateToISO, dateToISO} from "../utils";
 
 
 class LogTab extends Component{
@@ -61,14 +61,41 @@ class LogTab extends Component{
 }
 
 
+class ChannelPanelHeader extends Component {
+  constructor(props) {
+    super(props);
+    this.panel = props.panel;
+  }
+
+  render(){
+    const dtStart = dateToISO(this.panel.state.dtStart);
+    const dtEnd = dateToISO(this.panel.state.dtEnd);
+    return (
+      <div className="container">
+        <div className="row">
+          <div className="col-sm-12 col-md-8 col-lg-6">
+            <InputGroup size="sm" className="mb-3">
+              <InputGroup.Prepend>
+                <InputGroup.Text>Date Range:</InputGroup.Text>
+              </InputGroup.Prepend>
+              <FormControl type="date" defaultValue={dtStart}/>
+              <FormControl type="date" defaultValue={dtEnd}/>
+            </InputGroup>
+          </div>
+        </div>
+      </div>
+    );
+  }
+}
+
+
 export default class ChannelPanel extends Component {
   constructor(props){
     super(props);
-    const dtEnd = new Date();
-    const dtStart = new Date();
+    const dtEnd = new Date(currentDateToISO());
+    const dtStart = new Date(currentDateToISO());
     const initDate = dtEnd.getDate();
     dtStart.setDate(initDate - 7);
-    dtEnd.setDate(initDate + 1);
 
     this.state = {
       dtStart: dtStart,
@@ -117,6 +144,7 @@ export default class ChannelPanel extends Component {
       <div className="channel-panel-form-container">
         <div className="channel-panel-form-header">
           <span>Channel Logs</span>
+          <ChannelPanelHeader panel={this} />
         </div>
         {dateDivs}
       </div>

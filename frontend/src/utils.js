@@ -62,4 +62,21 @@ function dateToISO(dt){
 }
 
 
-export {get_backend_url, backend_request, dateToISO};
+/**
+ * Gets current date as ISO string
+ * @returns {string} ISO date
+ */
+function currentDateToISO(){
+  const dt = new Date();
+  const yy = dt.getFullYear();
+  const m = dt.getMonth() + 1;
+  const d = dt.getDate();
+
+  const mm = m < 10 ? "0" + m : m;
+  const dd = d < 10 ? "0" + d : d;
+
+  return `${yy}-${mm}-${dd}`;
+}
+
+
+export {get_backend_url, backend_request, dateToISO, currentDateToISO};
