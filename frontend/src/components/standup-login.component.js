@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import axios from 'axios';
+import ReactGA from 'react-ga';
 import {Redirect} from 'react-router-dom';
 import {get_backend_url} from '../utils'
 
@@ -38,11 +39,19 @@ class LoginForm extends Component {
         if (res.data.payload.email){
           this.login_callback(res.data.payload.email, res.data.payload.token);
           this.setState({error_msg: '', redirect: true});
+          ReactGA.event({
+            category: 'User',
+            action: 'Login'
+          });
 
         } else {
           console.log("Could not log in");
           let error_msg = res.data.message || "Could not authenticate user";
           this.setState({error_msg: error_msg});
+          ReactGA.event({
+            category: 'User',
+            action: 'Failed Login'
+          });
         }
       },
       err => {
@@ -53,6 +62,10 @@ class LoginForm extends Component {
           console.log("No error response");
           this.setState({error_msg: err})
         }
+        ReactGA.event({
+          category: 'User',
+          action: 'Failed Login'
+        });
       }
     );
   }
@@ -146,6 +159,10 @@ class RegisterForm extends Component {
       send_data
     ).then(
       res => {
+        ReactGA.event({
+          category: 'User',
+          action: 'Register Account'
+        });
         this.loginCallback(res.data.payload.email, res.data.payload.token);
         this.setState({error_msg: ''});
         /* Try to login */

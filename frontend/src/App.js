@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
 import {BrowserRouter as Router, Route, Redirect} from "react-router-dom";
+import ReactGA from 'react-ga';
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./static/login.css";
 import "./static/channel-list.css";
 import "./static/channel-panel.css";
-
 import StandupIndex from "./components/standup-index.component";
 import LoginRegisterForm from "./components/standup-login.component";
 import AppNavbar from "./components/standup-nav.component";
@@ -35,6 +35,7 @@ class App extends Component {
       prefer_login: false,
       activeNotificationID: undefined
     };
+    this.gaID = "";
     this.notifications = {};
     this.channelUpdater = function(){console.log("No channel updater")};
 
@@ -149,6 +150,27 @@ class App extends Component {
       this.channelUpdater = callback;
     };
     this.setChannelUpdater = this.setChannelUpdater.bind(this);
+
+    /* Process server-side configs */
+    backend_request(
+      "/api/1/config", this.global_handler, "GET",
+      undefined, undefined
+    ).then(
+      (response) => {
+        const config = response.data.payload;
+        this.gaID = config.google_analytics.id;
+        console.log(`GA ID: "${this.gaID}"`);
+
+        if (this.gaID){
+          ReactGA.initialize(this.gaID);
+          ReactGA.pageview("/");
+        } else {
+          console.log("Running mocked google analytics");
+          ReactGA.initialize(this.gaID, {testMode: true});
+        }
+      },
+      () => {console.log("Failed to load server configs!")}
+    );
   }
 
   render() {
