@@ -5,6 +5,8 @@ const BACKEND_SECRET = process.env['BACKEND_SECRET'] || '';
 const INTERNAL_BACKEND_DOMAIN = process.env["INTERNAL_BACKEND_DOMAIN"] || "http://localhost:8040";
 console.log("Using internal backend: " + INTERNAL_BACKEND_DOMAIN);
 
+/** Google analytics token */
+const GOOGLE_ANALYTICS_ID = process.env["GOOGLE_ANALYTICS_ID"] || "";
 
 /**
  * Returns url of internal backend's endpoint
@@ -50,6 +52,7 @@ function handle_internal_response(http_results, int_results){
 export {
   BACKEND_SECRET,
   INTERNAL_BACKEND_DOMAIN,
+  GOOGLE_ANALYTICS_ID,
   get_internal_url,
   handle_internal_backend_error,
   handle_internal_response

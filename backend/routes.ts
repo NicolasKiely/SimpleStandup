@@ -1,5 +1,6 @@
 import * as express from 'express'
 import * as endpoints from './endpoints'
+import * as config from './endpoints/configs'
 import * as auth_login from './endpoints/user/auth_login'
 import * as create_channel from './endpoints/channel/create_channel'
 import * as list_channels from './endpoints/channel/list_channels'
@@ -12,6 +13,8 @@ import * as update_notification from './endpoints/notifications/response'
 
 const standupRoutes = express.Router();
 
+standupRoutes.route('/config')
+  .get(config.getConfig);
 standupRoutes.route('/auth/login')
   .post(auth_login.auth_login);
 standupRoutes.route('/auth/register')
