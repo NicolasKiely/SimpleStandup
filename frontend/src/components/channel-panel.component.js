@@ -2,7 +2,7 @@
  * Panel for channel chat history
  */
 import React, {Component} from 'react';
-import {Badge} from 'react-bootstrap';
+import {Badge, ListGroup} from 'react-bootstrap';
 import {backend_request, dateToISO} from "../utils";
 
 
@@ -29,16 +29,33 @@ class LogTab extends Component{
       "channel-log-tab-wrapper channel-log-tab-wrapper-collapsed"
     ;
     const userPills = [];
+    const userMessages = [];
     for (const m of this.logData.messages){
-      userPills.push(
-        <Badge variant="secondary" key={m.user.email} className="channel-log-tab-user-badge" title={m.user.email}>
-          {m.user["first_name"]} {m.user["last_name"]}
+      const name = m.user["first_name"] +" "+ m.user["last_name"];
+      const key = m.user.email;
+      const badge = (
+        <Badge variant="secondary" key={key} title={m.user.email}
+               className="channel-log-tab-user-badge"
+        >
+          {name}
         </Badge>
       );
+      if (this.state.expanded){
+        userMessages.push(
+          <ListGroup.Item key={key}>
+            {badge}: {m.message}
+          </ListGroup.Item>
+        );
+      } else {
+        userPills.push(badge);
+      }
     }
     return <div className={wrapperClass} onClick={this.onClick}>
       <span className="channel-log-tab-date">{this.logData.date}</span>
       {userPills}
+      <ListGroup variant="flush">
+        {userMessages}
+      </ListGroup>
     </div>
   }
 }
