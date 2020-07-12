@@ -5,7 +5,9 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./static/login.css";
 import "./static/channel-list.css";
 import "./static/channel-panel.css";
+import "./static/settings.css";
 import StandupIndex from "./components/standup-index.component";
+import StandupSettings from "./components/standup-settings.component";
 import LoginRegisterForm from "./components/standup-login.component";
 import AppNavbar from "./components/standup-nav.component";
 import ToastNotification from "./components/notification-form.component";
@@ -190,6 +192,9 @@ class App extends Component {
         <StandupIndex user_email={this.state.user_email} user_token={this.state.user_token}
                       global_handler={this.global_handler} app={this}
         />
+      </Route>,
+      <Route path="/settings" key="/settings">
+        <StandupSettings app={this}/>
       </Route>
     ];
     if (!this.state.logged_in){
