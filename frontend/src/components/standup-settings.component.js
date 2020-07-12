@@ -15,21 +15,29 @@ export default class StandupSettings extends Component{
     return (
       <div className="settings-form-container">
         <div className="settings-form-header">
-          <span>User Settings</span>
+          <span>Account Settings</span>
         </div>
 
-        <InputGroup>
-          <InputGroup.Prepend>
-            <InputGroup.Text>First Name:</InputGroup.Text>
-          </InputGroup.Prepend>
-          <FormControl type="text"/>
-        </InputGroup>
-        <InputGroup>
-          <InputGroup.Prepend>
-            <InputGroup.Text>Last Name:</InputGroup.Text>
-          </InputGroup.Prepend>
-          <FormControl type="text"/>
-        </InputGroup>
+        <br />
+        <div className="container">
+          <div className="row">
+            <div className="col-sm-8 offset-sm-2">
+              <InputGroup>
+                <InputGroup.Prepend>
+                  <InputGroup.Text>First Name:</InputGroup.Text>
+                </InputGroup.Prepend>
+                <FormControl type="text"/>
+              </InputGroup>
+              <InputGroup>
+                <InputGroup.Prepend>
+                  <InputGroup.Text>Last Name:</InputGroup.Text>
+                </InputGroup.Prepend>
+                <FormControl type="text"/>
+              </InputGroup>
+            </div>
+          </div>
+        </div>
+        <br />
       </div>
     );
   }
