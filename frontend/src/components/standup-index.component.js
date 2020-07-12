@@ -5,7 +5,7 @@ import React, {Component} from 'react';
 import ReactGA from 'react-ga';
 import {backend_request} from "../utils";
 import ChannelIndexTab from "./channel-tab/channel-tab";
-import ChannelPanel from "./channel-panel.component";
+import ChannelPanel from "./channel-panel/channel-panel";
 
 
 class CreateChannelForm extends Component {
