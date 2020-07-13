@@ -57,9 +57,7 @@ export default class StandupSettings extends Component{
       };
       const url = "/api/1/settings/name";
       backend_request(url, this.app.global_handler, "POST", data, header).then(
-        () => {
-          console.log("Saved name");
-        },
+        () => {},
         () => {console.log("Failed to save user name")}
       );
     };
@@ -84,7 +82,7 @@ export default class StandupSettings extends Component{
                     <InputGroup.Text>First Name:</InputGroup.Text>
                   </InputGroup.Prepend>
                   <FormControl type="text" defaultValue={this.state.firstName}
-                               onChange={this.changeFirstName}
+                               onChange={this.changeFirstName} required={true}
                   />
                 </InputGroup>
                 <InputGroup>
@@ -92,7 +90,7 @@ export default class StandupSettings extends Component{
                     <InputGroup.Text>Last Name:</InputGroup.Text>
                   </InputGroup.Prepend>
                   <FormControl type="text" defaultValue={this.state.lastName}
-                               onChange={this.changeLastName}
+                               onChange={this.changeLastName} required={true}
                   />
                 </InputGroup>
                 <Button type="submit" variant="primary">Save</Button>

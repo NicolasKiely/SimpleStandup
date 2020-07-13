@@ -18,6 +18,8 @@ standupRoutes.route('/config')
   .get(config.getConfig);
 standupRoutes.route("/settings")
   .get(settings.getSettings);
+standupRoutes.route("/settings/name")
+  .post(settings.setName);
 standupRoutes.route('/auth/login')
   .post(auth_login.auth_login);
 standupRoutes.route('/auth/register')
