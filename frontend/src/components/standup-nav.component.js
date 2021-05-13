@@ -33,12 +33,12 @@ class AppNavbar extends Component {
       String.fromCharCode(9734) + " Notifications"
     ;
 
-    return <Navbar bg="light" expang="lg">
+    return <Navbar bg="light" expand="lg">
       <Navbar.Brand href="/">Standard Standup</Navbar.Brand>
       <Nav className="mr-auto">
         {this.app.state.logged_in ?
           <Nav.Link href="/settings">Settings</Nav.Link> :
-          undefined
+          <Nav.Link href="/login">Log In</Nav.Link>
         }
         {this.app.state.logged_in ?
           <NavDropdown title={noteTitle}>
